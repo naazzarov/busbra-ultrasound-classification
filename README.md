@@ -1,4 +1,7 @@
-# BUS-BRA Granular Computing — Breast Tumour Classification
+# Breast Ultrasound Classification with Fuzzy-Rough Feature Selection
+
+Breast ultrasound classification comparing SVM, fuzzy-rough and granular-ball
+feature selection, evaluated with patient-grouped nested cross-validation.
 
 ## Personal portfolio extension
 
@@ -44,7 +47,7 @@ The verified BUS-BRA radiomics table has **1,875 image records**, **1,064 patien
 Read [experimental protocol](docs/EVALUATION_PROTOCOL.md), [submission requirements](docs/SUBMISSION_FORMAT.md), and [contribution workflow](CONTRIBUTING.md).
 
 ## How to start and collaborate
-1. `git clone https://github.com/naazzarov/BUS-BRA-Granular-Computing.git`
+1. `git clone https://github.com/naazzarov/busbra-ultrasound-classification.git`
 2. Use Python 3.12 and `uv sync --locked`. Record exact package versions.
 3. Copy the already distributed CSV into `inputs/BUSBRA_features_ready.csv`. Confirm its SHA-256 before training; do **not commit** it.
 4. Work only on your assigned `feature/*` branch and method folder.
