@@ -1,6 +1,6 @@
 # Personal portfolio development
 
-Target repository: `naazzarov/BUS-BRA-Granular-Computing`.
+Target repository: `naazzarov/busbra-ultrasound-classification`.
 
 This extension preserves the original team's history and specifications from
 `Granular-Breast-Cancer-Team/BUS-BRA-Granular-Computing` at commit
