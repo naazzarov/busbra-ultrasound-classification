@@ -242,3 +242,22 @@ __marimo__/
 /private_outputs/
 /artifacts/
 /private_handoff/
+
+# Defense in depth: research artifacts must never be committed from any path.
+*.csv
+*.tsv
+*.xlsx
+*.parquet
+*.arrow
+*.npy
+*.npz
+*.pkl
+*.pickle
+*.joblib
+*.pdf
+*.rar
+*.zip
+**/internal_run.json
+**/run_info.json
+**/comparison_output/
+**/private_outputs/

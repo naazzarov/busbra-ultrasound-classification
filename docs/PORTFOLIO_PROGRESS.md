@@ -2,44 +2,75 @@
 
 Target repository: `naazzarov/BUS-BRA-Granular-Computing`.
 
-This local project preserves the history and project specifications from
+This extension preserves the original team's history and specifications from
 `Granular-Breast-Cancer-Team/BUS-BRA-Granular-Computing` at commit
-`c01ab91863b9fdd25cae9ae859a7fd2b00f66623`. The original team checkout is unchanged.
-The personal copy is published at
-https://github.com/naazzarov/BUS-BRA-Granular-Computing on the `main` branch.
-The baseline and shared infrastructure are available; the remaining methods and
-real-data experiments are still in progress.
+`c01ab91863b9fdd25cae9ae859a7fd2b00f66623`. Team attribution remains intact.
 
 ## Implemented
 
-- Immutable CSV fingerprint verification and structural validation.
-- The full 32-candidate baseline SVM search, five predefined patient-disjoint
+- Immutable CSV fingerprint and structural validation.
+- Three executable methods: all-feature SVM, conventional fuzzy-rough
+  QuickReduct + SVM, and paper-defined GBFRS + SVM.
+- The exact 32-candidate common SVM search, five predefined patient-disjoint
   outer folds and three stratified patient-grouped inner folds.
-- Training-only scaling, measured search/refit and prediction times, software
-  versions, per-fold metrics and mean with sample standard deviation.
-- A CLI that refuses missing or altered datasets and refuses to overwrite runs.
+- Training-only scaling and selection, with explicit metric/accuracy/feature
+  count/grid-order tie handling.
+- Exact handoff submission exports, complete inner-search audit records,
+  selected names, measured timings, runnable source and software versions.
+- Original comparison checker restored, with optional private-root argument
+  and a pinned input-fingerprint check.
+- Synthetic equation checks, paper-example reproduction, sample-coverage and
+  overlap tests, actual scaler/selector training-boundary audits, output-schema
+  tests and checks that private artifacts are ignored.
+- Defense-in-depth data ignore rules and CI checks of tracked file contents.
 
-## Pending the original handoff and published references
+## Completed private validation — 2026-10-19
 
-The private ZIP, PDF, CSV, official comparison script and complete submission
-templates are absent from this cloud workspace. Fuzzy-rough and GBFRS methods
-still require implementation and source verification. No actual dataset
-experiment or three-method comparison has been completed. Synthetic test runs
-are software checks, not research results.
+All three real-data experiments completed the five fixed outer folds, producing
+1,875 held-out predictions per method. The unchanged original handoff checker
+and repository checker both validated all three submissions. All 31 local tests
+and both GitHub CI runs passed for the implementation commit. Complete private
+submissions were returned to the original handoff folders; detailed scores,
+source checksums and completion manifest remain only in local outputs.
 
-Do not describe this project as completed or cite synthetic scores on a CV.
-Keep the team's attribution when presenting the completed personal extension.
+GBFRS retains the independent-reconstruction qualification below. Completion of
+the software and locked evaluation does not establish statistical superiority
+or clinical validity. Concurrent method processes make timings descriptive,
+not isolated speed benchmarks.
 
-## Development
+## Reference verification
+
+The four-page private handoff PDF and frozen dataset are now available locally.
+See [method definitions](METHODS.md) and [reference audit](REFERENCE_AUDIT.md).
+The author-linked GBFRS archive has no code license and its dependency expression
+differs from paper Eq. 13. Our independent reconstruction implements the paper's
+own-ball weighting, with documented deterministic construction and stopping
+choices. It is not an unmodified execution of the authors' code and does not
+claim to reproduce their benchmark scores or journal experiments.
+
+## Development and private experiments
+
+Use Python 3.12 (3.11 also supported) and the checked-in lockfile:
 
 ```bash
 uv sync --locked
 uv run --locked pytest
-uv run --locked busbra validate --data inputs/BUSBRA_features_ready.csv
-uv run --locked busbra baseline --data inputs/BUSBRA_features_ready.csv --output private_outputs/baseline-run-001 --jobs 2
+uv run --locked python tools/check_public_files.py
+uv run --locked busbra validate --data /PRIVATE/HANDOFF/inputs/BUSBRA_features_ready.csv
+uv run --locked busbra baseline --data /PRIVATE/HANDOFF/inputs/BUSBRA_features_ready.csv --output private_outputs/run-001/submissions/baseline --jobs 2
+uv run --locked busbra fuzzy_rough --data /PRIVATE/HANDOFF/inputs/BUSBRA_features_ready.csv --output private_outputs/run-001/submissions/fuzzy_rough --jobs 2
+uv run --locked busbra gbfrs --data /PRIVATE/HANDOFF/inputs/BUSBRA_features_ready.csv --output private_outputs/run-001/submissions/gbfrs --jobs 2
 ```
 
-Only train when the unchanged team CSV passes validation. Output directories
-contain private row-level artifacts. `internal_run.json` is an internal record;
-official `best_params.csv`, `timings.csv`, and `run_info.json` must be exported
-against the original ZIP templates once supplied.
+Place a local copy or symlink to the frozen CSV at
+`private_outputs/run-001/inputs/BUSBRA_features_ready.csv`, then:
+
+```bash
+uv run --locked python tools/compare_results.py --root private_outputs/run-001
+```
+
+Each output path must be new; the CLI refuses overwrites. Real experiments and
+comparison status are recorded only in local private outputs. No source data,
+patient identifiers, predictions, selected-feature exports, model files or
+real-data scores are included in the public repository. Synthetic test scores
+are software checks, never research results or CV performance claims.

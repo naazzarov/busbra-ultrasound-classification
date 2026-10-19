@@ -1,22 +1,23 @@
 # BUS-BRA Granular Computing — Breast Tumour Classification
 
-## Personal portfolio extension — in progress
+## Personal portfolio extension
 
-This personal extension targets `naazzarov/BUS-BRA-Granular-Computing` and retains
-the original team project's history and specifications. See
-[development progress and runnable commands](docs/PORTFOLIO_PROGRESS.md).
+This extension implements all three methods and retains the original team's
+history and attribution. See [progress and runnable commands](docs/PORTFOLIO_PROGRESS.md),
+[method definitions](docs/METHODS.md) and [reference verification](docs/REFERENCE_AUDIT.md).
+The common runner fits preprocessing and selectors inside patient-grouped nested
+cross-validation and exports the exact private handoff format. Equation, leakage,
+privacy and export checks run in CI. Real-data experiments and scores remain local.
 
-The shared data validator and full nested baseline SVM workflow are implemented
-and tested on synthetic fixtures. The fuzzy-rough and GBFRS implementations,
-official submission export, and real experiments are pending the private team
-handoff and verified method references. No BUS-BRA performance results are
-claimed. The dataset and row-level predictions stay private.
+GBFRS is an independent paper reconstruction with documented adaptations. The
+author archive is unlicensed and differs from the paper's weighting equation;
+our source implements Equation 13 and does not redistribute the archive.
 
 The original team brief follows.
 
 **A three-person university project:** binary benign/malignant classification comparing an all-feature SVM, conventional fuzzy-rough feature selection + SVM, and published granular-ball fuzzy-rough feature selection (GBFRS) + SVM.
 
-**Status:** repository ready for development. No model results are claimed yet.
+**Status:** all three implementations available. Research results are private.
 
 ## Dataset — frozen for all three methods
 The verified BUS-BRA radiomics table has **1,875 image records**, **1,064 patient groups**, and **288 named numerical features** (102 original-image + 186 wavelet-derived). Of these, 42 columns are exact redundancies; all **288 must remain available at the start of every method**. Labels: 0 = benign, 1 = malignant.
@@ -43,13 +44,13 @@ The verified BUS-BRA radiomics table has **1,875 image records**, **1,064 patien
 Read [experimental protocol](docs/EVALUATION_PROTOCOL.md), [submission requirements](docs/SUBMISSION_FORMAT.md), and [contribution workflow](CONTRIBUTING.md).
 
 ## How to start and collaborate
-1. `git clone https://github.com/Granular-Breast-Cancer-Team/BUS-BRA-Granular-Computing.git`
-2. Use Python 3.11 and install your method's dependencies. Record exact package versions.
+1. `git clone https://github.com/naazzarov/BUS-BRA-Granular-Computing.git`
+2. Use Python 3.12 and `uv sync --locked`. Record exact package versions.
 3. Copy the already distributed CSV into `inputs/BUSBRA_features_ready.csv`. Confirm its SHA-256 before training; do **not commit** it.
 4. Work only on your assigned `feature/*` branch and method folder.
 5. Push commits to your branch and open a pull request to main. Coordinator reviews before merging.
 
-**Result comparison:** the complete, tested `tools/compare_results.py` and submission templates are already in the **BUSBRA_Team_Handoff.zip** shared privately with the team. Continue using that original package's schema; avoid incompatible new formats. Return submitted predictions to the coordinator privately until derived-data publication rights are confirmed.
+**Result comparison:** `tools/compare_results.py --root PRIVATE_HANDOFF_ROOT` validates the three private submissions against the frozen CSV. The runner exports the original handoff schema. Return submissions privately; keep all source and derived data out of GitHub.
 
 ## Source and attribution
 [Gómez-Flores, Gregorio-Calas & Pereira, BUS-BRA, *Medical Physics* (2024)](https://doi.org/10.1002/mp.16812). Official dataset: https://zenodo.org/records/8231412. Source `LICENSE.txt` must be checked before public data redistribution. Educational research only; not a medical diagnostic system.

@@ -1,7 +1,13 @@
-# Member 3 — All-feature SVM baseline
+# baseline + SVM
 
-Use all **288 frozen numerical features**, StandardScaler fitted inside training partitions, and the shared SVM grid. **No feature selector.** Use the source five patient-disjoint outer folds and group-stratified three-fold inner tuning.
+The implementation lives in `src/busbra/` and uses the common nested runner.
+Read [method definitions](../docs/METHODS.md) and [reference audit](../docs/REFERENCE_AUDIT.md).
 
-Write self-contained reproducible code and tests in this folder. Return the five-fold predictions, all 288 names per fold, tuned settings, version record and timing in the original team-handoff submission templates.
+```bash
+uv sync --locked
+uv run --locked busbra baseline --data /PRIVATE/PATH/BUSBRA_features_ready.csv --output private_outputs/baseline-run-001 --jobs 2
+```
 
-Read ../docs/EVALUATION_PROTOCOL.md and ../docs/SUBMISSION_FORMAT.md.
+The output must be a new private directory. It includes the exact handoff CSV/JSON
+schemas, complete inner-search audit, code and pinned package versions. The frozen
+CSV must pass byte-hash validation. Never publish this output folder.

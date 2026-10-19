@@ -1,7 +1,13 @@
-# Member 2 — Conventional Fuzzy-Rough + SVM
+# fuzzy_rough + SVM
 
-Implement a specific **published** fuzzy-rough feature-selection method, citing mathematical similarity relation, dependency function, fuzzy operators, selection search, and stopping rule. Do not substitute a different sklearn filter.
+The implementation lives in `src/busbra/` and uses the common nested runner.
+Read [method definitions](../docs/METHODS.md) and [reference audit](../docs/REFERENCE_AUDIT.md).
 
-Start from the exact 288 columns and fit every selector only with *training-fold* labels. Use the same grouped outer/inner folds and common SVM grid as the other models. Submit reproducible source code, selected feature names, predictions, best settings and timings.
+```bash
+uv sync --locked
+uv run --locked busbra fuzzy_rough --data /PRIVATE/PATH/BUSBRA_features_ready.csv --output private_outputs/fuzzy_rough-run-001 --jobs 2
+```
 
-Read ../docs/EVALUATION_PROTOCOL.md and ../docs/SUBMISSION_FORMAT.md.
+The output must be a new private directory. It includes the exact handoff CSV/JSON
+schemas, complete inner-search audit, code and pinned package versions. The frozen
+CSV must pass byte-hash validation. Never publish this output folder.

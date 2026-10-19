@@ -37,18 +37,20 @@ def test_existing_results_are_preserved_without_training(tmp_path, monkeypatch, 
     assert "already exists" in capsys.readouterr().err
 
 
-def test_cli_writes_internal_artifacts_to_new_directory(tmp_path, monkeypatch):
+def test_cli_exports_official_submission(tmp_path, synthetic_table, monkeypatch):
+    from busbra.data import ValidatedDataset
+    from busbra.evaluation import evaluate_method
     output = tmp_path / "new-run"
-    result = SimpleNamespace(
-        predictions=pd.DataFrame({"image_id": ["synthetic"], "y_pred": [0]}),
-        selected_features=pd.DataFrame({"outer_fold": [1], "feature_name": ["original_0"]}),
-        metadata={"method": "baseline", "fixture": "synthetic-software-test"},
-        folds=[{"outer_fold": 1}],
-    )
-    monkeypatch.setattr(cli, "load_dataset", lambda path: object())
-    monkeypatch.setattr(cli, "evaluate_baseline", lambda dataset, n_jobs: result)
-    assert main(["baseline", "--output", str(output)]) == 0
-    assert set(path.name for path in output.iterdir()) == {"predictions.csv", "selected_features.csv", "internal_run.json"}
-    record = json.loads((output / "internal_run.json").read_text())
-    assert record["folds"] == [{"outer_fold": 1}]
-    assert record["fixture"] == "synthetic-software-test"
+    names = tuple(c for c in synthetic_table if c.startswith("original_"))
+    dataset = ValidatedDataset(synthetic_table, names, "synthetic-test-only")
+    monkeypatch.setattr(cli, "load_dataset", lambda path: dataset)
+    assert main(["fuzzy_rough", "--output", str(output), "--jobs", "1"]) == 0
+    assert len(pd.read_csv(output / "predictions.csv")) == len(synthetic_table)
+    assert list(pd.read_csv(output / "best_params.csv")) == [
+        "outer_fold", "kernel", "C", "gamma", "class_weight", "inner_macro_f1", "inner_accuracy"]
+    assert list(pd.read_csv(output / "timings.csv")) == [
+        "outer_fold", "selector_seconds", "svm_tuning_seconds", "refit_seconds", "predict_seconds", "total_seconds"]
+    record = json.loads((output / "run_info.json").read_text())
+    assert record["status"] == "COMPLETED"
+    assert record["method"] == "fuzzy_rough"
+    assert (output / "code/busbra/selectors.py").is_file()
