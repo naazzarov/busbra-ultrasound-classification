@@ -24,6 +24,20 @@ This extension preserves the original team's history and specifications from
   tests and checks that private artifacts are ignored.
 - Defense-in-depth data ignore rules and CI checks of tracked file contents.
 
+## Completed private validation — 2026-10-19
+
+All three real-data experiments completed the five fixed outer folds, producing
+1,875 held-out predictions per method. The unchanged original handoff checker
+and repository checker both validated all three submissions. All 31 local tests
+and both GitHub CI runs passed for the implementation commit. Complete private
+submissions were returned to the original handoff folders; detailed scores,
+source checksums and completion manifest remain only in local outputs.
+
+GBFRS retains the independent-reconstruction qualification below. Completion of
+the software and locked evaluation does not establish statistical superiority
+or clinical validity. Concurrent method processes make timings descriptive,
+not isolated speed benchmarks.
+
 ## Reference verification
 
 The four-page private handoff PDF and frozen dataset are now available locally.
