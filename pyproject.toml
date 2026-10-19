@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=77,<83"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "busbra-granular-computing"
+version = "0.1.0"
+description = "Patient-grouped evaluation of SVM and granular feature selection for BUS-BRA radiomics"
+requires-python = ">=3.11,<3.12"
+dependencies = [
+    "numpy==2.4.6",
+    "pandas==2.3.3",
+    "scipy==1.17.1",
+    "scikit-learn==1.9.1",
+    "joblib==1.6.0",
+]
+
+[project.scripts]
+busbra = "busbra.cli:main"
+
+[dependency-groups]
+dev = ["pytest==9.1.1"]
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.setuptools.package-data]
+busbra = ["resources/*.json"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"

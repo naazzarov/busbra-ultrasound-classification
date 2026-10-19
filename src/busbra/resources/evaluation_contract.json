@@ -1,0 +1,65 @@
+{
+  "protocol_id": "BUSBRA-V1-OUTER5-INNER3-MACROF1",
+  "dataset_filename": "inputs/BUSBRA_features_ready.csv",
+  "dataset_sha256": "7f22dccf4be1f8920a0e9fbd46ae31ed814f1be138e55dc936b00b76d67324ef",
+  "n_rows": 1875,
+  "n_patients": 1064,
+  "n_predictors": 288,
+  "labels": {
+    "0": "benign",
+    "1": "malignant"
+  },
+  "outer_fold_column": "fold5_kfold",
+  "outer_folds": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "inner_cv": {
+    "method": "StratifiedGroupKFold",
+    "n_splits": 3,
+    "shuffle": true,
+    "random_state": "42 + outer_fold",
+    "group": "patient_id"
+  },
+  "training": {
+    "primary_selection_metric": "f1_macro",
+    "secondary_metrics": [
+      "accuracy",
+      "balanced_accuracy",
+      "malignant_recall",
+      "benign_specificity"
+    ],
+    "preprocessing": "StandardScaler fitted inside train folds",
+    "features": "only the 288 original_* and wavelet-* fields; do not add columns or use target/metadata"
+  },
+  "common_svm_grid": {
+    "C": [
+      0.1,
+      1,
+      10,
+      100
+    ],
+    "kernel": [
+      "linear",
+      "rbf"
+    ],
+    "rbf_gamma": [
+      "scale",
+      0.01,
+      0.1
+    ],
+    "class_weight": [
+      null,
+      "balanced"
+    ]
+  },
+  "methods": [
+    "baseline",
+    "fuzzy_rough",
+    "gbfrs"
+  ],
+  "note": "Do not add engineered features, new datasets, oversampling, patient metadata or pretrained predictors. Outer folds never used for tuning."
+}

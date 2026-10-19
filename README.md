@@ -1,5 +1,19 @@
 # BUS-BRA Granular Computing — Breast Tumour Classification
 
+## Personal portfolio extension — in progress
+
+This personal extension targets `naazzarov/BUS-BRA-Granular-Computing` and retains
+the original team project's history and specifications. See
+[development progress and runnable commands](docs/PORTFOLIO_PROGRESS.md).
+
+The shared data validator and full nested baseline SVM workflow are implemented
+and tested on synthetic fixtures. The fuzzy-rough and GBFRS implementations,
+official submission export, and real experiments are pending the private team
+handoff and verified method references. No BUS-BRA performance results are
+claimed. The dataset and row-level predictions stay private.
+
+The original team brief follows.
+
 **A three-person university project:** binary benign/malignant classification comparing an all-feature SVM, conventional fuzzy-rough feature selection + SVM, and published granular-ball fuzzy-rough feature selection (GBFRS) + SVM.
 
 **Status:** repository ready for development. No model results are claimed yet.

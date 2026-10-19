@@ -237,3 +237,8 @@ __marimo__/
 /submissions/*/timings.csv
 /submissions/*/run_info.json
 *.DS_Store
+
+# Personal development: private datasets and row-level experiment artifacts
+/private_outputs/
+/artifacts/
+/private_handoff/
