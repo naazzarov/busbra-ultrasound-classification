@@ -5,7 +5,10 @@ Target repository: `naazzarov/BUS-BRA-Granular-Computing`.
 This local project preserves the history and project specifications from
 `Granular-Breast-Cancer-Team/BUS-BRA-Granular-Computing` at commit
 `c01ab91863b9fdd25cae9ae859a7fd2b00f66623`. The original team checkout is unchanged.
-The personal copy currently has no Git remote and has not been published.
+The personal copy is published at
+https://github.com/naazzarov/BUS-BRA-Granular-Computing on the `main` branch.
+The baseline and shared infrastructure are available; the remaining methods and
+real-data experiments are still in progress.
 
 ## Implemented
 
