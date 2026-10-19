@@ -46,11 +46,11 @@ def test_full_baseline_keeps_every_scaler_inside_training(synthetic_table, monke
     assert len(result.selected_features) == 5 * 288
     assert len(result.folds) == 5
     assert [fold["inner_seed"] for fold in result.folds] == [43, 44, 45, 46, 47]
-    # 32 candidates x 3 CV fits plus one refit for each outer fold.
-    assert len(fit_groups) == 5 * 97
+    # Three training-only transforms, reused within split, plus outer refit.
+    assert len(fit_groups) == 5 * 4
     for index, fold in enumerate(result.folds):
         train_groups = set(synthetic_table.loc[synthetic_table.fold5_kfold != index + 1, "patient_id"])
-        observed = fit_groups[index * 97:(index + 1) * 97]
+        observed = fit_groups[index * 4:(index + 1) * 4]
         assert all(groups <= train_groups for groups in observed)
         assert all(len(groups) < len(train_groups) for groups in observed[:-1])
         assert observed[-1] == train_groups
@@ -69,3 +69,50 @@ def test_evaluation_rechecks_outer_leakage(synthetic_table):
     names = tuple(f"original_{i}" for i in range(288))
     with pytest.raises(ValueError, match="Patient leakage"):
         evaluation.evaluate_baseline(ValidatedDataset(synthetic_table, names, "synthetic"))
+
+
+def test_candidate_tie_breaking():
+    rows = [dict(macro_f1=.8, accuracy=.9, n_features=3),
+            dict(macro_f1=.8, accuracy=.9, n_features=2),
+            dict(macro_f1=.8, accuracy=.9, n_features=2)]
+    assert evaluation.choose_candidate(rows) == 1
+    rows[0]["accuracy"] = .91
+    assert evaluation.choose_candidate(rows) == 0
+    rows[2]["macro_f1"] = .81
+    assert evaluation.choose_candidate(rows) == 2
+
+
+@pytest.mark.parametrize("method", ["fuzzy_rough", "gbfrs"])
+def test_selectors_are_fitted_only_on_current_training_partition(synthetic_table, monkeypatch, method):
+    observed = []
+    original = evaluation.make_selector
+    # A scaler that retains the synthetic group marker lets the selector audit
+    # its actual inputs; real scaling is independently audited above.
+    class MarkerScaler:
+        def fit(self, X):
+            return self
+        def transform(self, X):
+            return X
+    class Spy:
+        def fit_transform(self, X, y):
+            observed.append(set(X[:,0].astype(int)))
+            self.impl = original(method).fit(X, y)
+            self.dependency_history_ = self.impl.dependency_history_
+            if method == "gbfrs":
+                self.ball_sizes_ = self.impl.ball_sizes_
+            return self.impl.transform(X)
+        def get_support(self, indices):
+            return self.impl.get_support(indices=indices)
+        def transform(self, X):
+            return self.impl.transform(X)
+    monkeypatch.setattr(evaluation, "StandardScaler", MarkerScaler)
+    monkeypatch.setattr(evaluation, "make_selector", lambda name: Spy())
+    names = tuple(c for c in synthetic_table if c.startswith("original_"))
+    result = evaluation.evaluate_method(ValidatedDataset(synthetic_table, names, "synthetic"), method=method, n_jobs=1)
+    assert len(observed) == 20
+    for f in range(1,6):
+        expected = set(synthetic_table.loc[synthetic_table.fold5_kfold != f, "patient_id"])
+        for inner_groups in observed[(f-1)*4:(f-1)*4+3]:
+            assert inner_groups < expected
+        assert observed[(f-1)*4+3] == expected
+    assert len(result.predictions) == len(synthetic_table)
