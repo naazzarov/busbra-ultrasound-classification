@@ -1,0 +1,19 @@
+cff-version: 1.2.0
+message: "Please cite the software and the original BUS-BRA, fuzzy-rough, and GBFRS research described in docs/METHODS.md. The manuscript is a research draft."
+type: software
+title: "BUS-BRA: Patient-Grouped Evaluation of Fuzzy-Rough Feature Selection"
+authors:
+  - family-names: Nazarov
+    given-names: Bahodir
+  - family-names: Gharib
+    given-names: Zineb
+  - family-names: Zazoul
+    given-names: Fatima
+repository-code: "https://github.com/naazzarov/busbra-ultrasound-classification"
+url: "https://github.com/naazzarov/busbra-ultrasound-classification"
+keywords:
+  - feature selection
+  - fuzzy-rough sets
+  - granular-ball computing
+  - breast ultrasound
+  - nested cross-validation

@@ -1,0 +1,46 @@
+% Generated from validated aggregate-only records.
+
+\newcommand{\NoiseTable}{%
+\begin{tabular}{lrrr}
+\toprule
+Setting & Macro-F1 (mean $\pm$ SD) & Accuracy & Features \\
+\midrule
+All-feature SVM: 0\% & 0.8534 $\pm$ 0.0436 & 0.8714 & 288.0 \\
+All-feature SVM: 10\% & 0.8299 $\pm$ 0.0359 & 0.8512 & 288.0 \\
+All-feature SVM: 20\% & 0.8094 $\pm$ 0.0421 & 0.8373 & 288.0 \\
+Fuzzy-rough + SVM: 0\% & 0.8501 $\pm$ 0.0362 & 0.8673 & 7.6 \\
+Fuzzy-rough + SVM: 10\% & 0.7898 $\pm$ 0.0699 & 0.8095 & 7.8 \\
+Fuzzy-rough + SVM: 20\% & 0.7548 $\pm$ 0.0583 & 0.7726 & 8.2 \\
+GBFRS reconstruction + SVM: 0\% & 0.8540 $\pm$ 0.0417 & 0.8726 & 13.0 \\
+GBFRS reconstruction + SVM: 10\% & 0.8405 $\pm$ 0.0380 & 0.8609 & 16.6 \\
+GBFRS reconstruction + SVM: 20\% & 0.8181 $\pm$ 0.0414 & 0.8401 & 17.6 \\
+\bottomrule
+\end{tabular}}
+
+\newcommand{\SensitivityTable}{%
+\begin{tabular}{lrrr}
+\toprule
+Setting & Macro-F1 (mean $\pm$ SD) & Accuracy & Features \\
+\midrule
+Own: purity 0.90, seed 42 & 0.8540 $\pm$ 0.0417 & 0.8726 & 13.0 \\
+Own: purity 0.80, seed 42 & 0.8537 $\pm$ 0.0351 & 0.8705 & 14.8 \\
+Own: purity 0.95, seed 42 & 0.8525 $\pm$ 0.0392 & 0.8699 & 12.8 \\
+Own: purity 0.90, seed 43 & 0.8525 $\pm$ 0.0312 & 0.8706 & 14.2 \\
+Own: purity 0.90, seed 44 & 0.8504 $\pm$ 0.0393 & 0.8684 & 14.6 \\
+Alternative criterion: same balls & 0.5051 $\pm$ 0.0393 & 0.5746 & 1.8 \\
+\bottomrule
+\end{tabular}}
+
+\newcommand{\ExternalTable}{%
+\begin{tabular}{lrrr}
+\toprule
+Setting & Macro-F1 (mean $\pm$ SD) & Accuracy & Features \\
+\midrule
+All-feature SVM & 0.6886 $\pm$ 0.0545 & 0.7022 & 102.0 \\
+Fuzzy-rough + SVM & 0.6737 $\pm$ 0.0359 & 0.6944 & 5.8 \\
+GBFRS reconstruction + SVM & 0.6700 $\pm$ 0.0580 & 0.6865 & 12.2 \\
+ANOVA + SVM & 0.7296 $\pm$ 0.0623 & 0.7460 & 18.0 \\
+Mutual information + SVM & 0.7172 $\pm$ 0.0429 & 0.7302 & 18.0 \\
+L1 logistic selection + SVM & 0.7272 $\pm$ 0.0584 & 0.7458 & 9.6 \\
+\bottomrule
+\end{tabular}}

@@ -1,0 +1,15 @@
+{
+  "protocol_id": "BREAST-INDEPENDENT-20261028-V1",
+  "status": "specified before downloading or evaluating the BrEaST cohort; exploratory, not a public preregistration",
+  "source": "TCIA BREAST-LESIONS-USG, DOI 10.7937/9WKK-Q141, CC BY 4.0; Pawlowska et al., Scientific Data 11,148 (2024), DOI 10.1038/s41597-024-02984-z",
+  "cohort": "256 source patient cases; exclude four normal cases by provided Classification; expect 252 lesion cases (154 benign,98 malignant). One image per patient. Use union of supplied tumor mask, including disconnected lesions; exclude no cases based on model outcomes.",
+  "predictors": "102 nondeprecated original-image PyRadiomics features: firstorder,shape2D,glcm,glrlm,glszm,gldm,ngtdm. No clinical attributes, BIRADS, histology or source IDs are predictors.",
+  "extraction": {"pyradiomics": "3.0.1", "binWidth": 16, "force2D": true, "force2Ddimension": 0, "label": 1, "normalize": false, "image_type": "Original", "spacing": "unit pixels", "resampling": "none", "grayscale": "Pillow L conversion", "mask": "nonzero foreground; no GT-based crop or image resize"},
+  "outer_cv": "StratifiedKFold(5,shuffle=True,random_state=42); one verified patient case per row",
+  "inner_cv": "StratifiedGroupKFold(3,shuffle=True,random_state=42+outer_fold)",
+  "methods": ["baseline","fuzzy_rough","gbfrs","anova","mutual_information","l1_logistic"],
+  "search": "Original 32 SVM grid candidates; ANOVA/MI k5,10,20 and L1 C0.01,0.1,1 tuned jointly inside training folds; primary fixed GBFRS purity0.90 seed42",
+  "audit": "Source archives and canonical feature matrix checksums, zero duplicate pixel hashes within cohort, complete/finite features, patient-disjoint nesting, exact OOF coverage; report extraction failure rather than silently exclude rows",
+  "interpretation": "Independent ultrasound cohort evaluation of separately retrained method pipelines. Different 102-feature extraction, no frozen-model transfer and no claim to reproduce missing original BUS-BRA extraction configuration. Not external validation of a BUS-BRA-trained model.",
+  "privacy": "Original handoff never sent to a remote runner. Only publicly licensed BrEaST files may be fetched in ephemeral CI. Publish aggregate metrics and provenance only; do not upload source files, feature rows, IDs, predictions or models."
+}

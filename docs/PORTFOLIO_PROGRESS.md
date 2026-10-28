@@ -71,6 +71,51 @@ uv run --locked python tools/compare_results.py --root private_outputs/run-001
 
 Each output path must be new; the CLI refuses overwrites. Real experiments and
 comparison status are recorded only in local private outputs. No source data,
-patient identifiers, predictions, selected-feature exports, model files or
-real-data scores are included in the public repository. Synthetic test scores
+patient identifiers, predictions, selected-feature exports or model files are
+included in the public repository. The paper release intentionally includes only
+aggregate real-data scores and derived plots. Synthetic test scores
 are software checks, never research results or CV performance claims.
+
+## Paper and repeat execution — 2026-10-28
+
+All three methods were re-executed sequentially using the unchanged model definitions,
+frozen CSV, supplied patient-grouped folds and full 32-candidate search. The private
+run manifest records completion of all three methods. The paper release adds
+aggregate-only conditional patient-bootstrap intervals and descriptive feature
+stability, plus a local LaTeX manuscript and scientific figures. These secondary
+analyses were added after the initial results and are not preregistered confirmatory
+analyses. See RESULTS.md and STATISTICAL_ANALYSIS.md for limitations.
+
+The original team history and attribution are preserved. Paper author names/order
+were supplied by the requester; affiliations, contact details, individual
+contributions and research statements require author review before submission.
+
+## Extended evidence — 2026-10-28
+
+Three nested secondary baselines (ANOVA, mutual information and L1 logistic selection)
+completed all five supplied BUS-BRA folds. Seven pipelines completed a separate WDBC
+cytology benchmark, including an unchanged, hash-pinned author selector called only
+from a private local file. No author source is redistributed. The independent
+reconstruction and original primary protocol are unchanged. The reference criterion
+is now audited directly on synthetic inputs. See SECONDARY_STUDY.md and the validated
+aggregate-only secondary results. A different modality benchmark does not establish
+external ultrasound validity; author review and submission remain outstanding.
+
+The optional unchanged private author selector also completed BUS-BRA (five nested
+outer folds). All seven pipelines are now available for each dataset, with the
+original three BUS-BRA pipelines retained as the primary comparison. No reference
+run remains pending or is silently replaced.
+
+## Robustness and independent ultrasound extension — 2026-10-28
+
+Eleven additional BUS-BRA settings completed, including whole-patient label
+corruption, GBFRS purity/seed sensitivity and a controlled dependency criterion
+ablation. Six pipelines also completed on 252 independent BrEaST ultrasound
+patients, with a separate public 102-feature extraction. The corrected public-data
+workflow is green. The primary frozen experiment is unchanged. Source hashes,
+aggregate-only results and fitting-boundary checks are published; no private
+handoff data or private author source was sent to the runner.
+
+See EXPANDED_STUDY.md for the result interpretation and remaining limitations.
+The project has independent ultrasound method evidence, while exact external
+testing of a frozen BUS-BRA model and human author review remain incomplete.

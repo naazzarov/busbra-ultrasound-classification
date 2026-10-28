@@ -1,0 +1,361 @@
+{
+  "protocol_id": "BREAST-INDEPENDENT-20261028-V1",
+  "status": "COMPLETED",
+  "scope": "Independent ultrasound cohort method evaluation, separately retrained; not frozen-model external validation",
+  "provenance": {
+    "dataset": "BrEaST",
+    "doi": "10.7937/9WKK-Q141",
+    "license": "CC BY 4.0",
+    "source_sha256": {
+      "images": "c32e49cdfa54042e065582d0cb35978b5fc5e5b5e461b33bf773fb50cfdad355",
+      "clinical": "89a8874496a6f1f93960390b963f7369b90f7e72ee08a738f2d17e37f5eff8bf"
+    },
+    "feature_csv_sha256": "7f7565ba5d1b49ef9b545b07df623f9535f8794470b624fc0c92a46c200d028a",
+    "source_cases": 256,
+    "normal_cases_excluded": 4,
+    "n_cases": 252,
+    "n_benign": 154,
+    "n_malignant": 98,
+    "n_features": 102,
+    "duplicate_pixel_hashes": 0,
+    "extraction_failures": 0,
+    "versions": {
+      "pyradiomics": "3.0.1",
+      "SimpleITK": "2.4.1",
+      "numpy": "1.26.4",
+      "pandas": "2.2.3",
+      "PyWavelets": "1.8.0",
+      "Pillow": "11.1.0",
+      "openpyxl": "3.1.5"
+    },
+    "protocol_sha256": "570495a21b3e659a882415592f3e918a70fcc8b02a1f4fa485946a6d62e19e9e"
+  },
+  "methods": {
+    "baseline": {
+      "method": "baseline",
+      "n_rows": 252,
+      "n_features": 102,
+      "unit": "patient",
+      "metrics": {
+        "accuracy": {
+          "mean": 0.7021960784313727,
+          "sd": 0.05011068103418783
+        },
+        "f1_macro": {
+          "mean": 0.6885657310167995,
+          "sd": 0.05454313282631355
+        },
+        "balanced_accuracy": {
+          "mean": 0.6913752122241087,
+          "sd": 0.0567279560029446
+        },
+        "malignant_sensitivity": {
+          "mean": 0.6421052631578947,
+          "sd": 0.09830629391764656
+        },
+        "benign_specificity": {
+          "mean": 0.7406451612903225,
+          "sd": 0.049006784554407615
+        }
+      },
+      "mean_features": 102,
+      "stability": {
+        "nogueira": 1,
+        "mean_pairwise_jaccard": 1,
+        "n_fold_pairs": 10
+      },
+      "candidate_counts": [
+        32,
+        32,
+        32,
+        32,
+        32
+      ],
+      "best_selector_settings": [
+        {},
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    "fuzzy_rough": {
+      "method": "fuzzy_rough",
+      "n_rows": 252,
+      "n_features": 102,
+      "unit": "patient",
+      "metrics": {
+        "accuracy": {
+          "mean": 0.6944313725490197,
+          "sd": 0.03607566059266595
+        },
+        "f1_macro": {
+          "mean": 0.6736575004052134,
+          "sd": 0.035921949447566215
+        },
+        "balanced_accuracy": {
+          "mean": 0.673058856819468,
+          "sd": 0.03568289543108485
+        },
+        "malignant_sensitivity": {
+          "mean": 0.5805263157894736,
+          "sd": 0.08868850528410706
+        },
+        "benign_specificity": {
+          "mean": 0.7655913978494623,
+          "sd": 0.07348107339040813
+        }
+      },
+      "mean_features": 5.8,
+      "stability": {
+        "nogueira": 0.19564126460678155,
+        "mean_pairwise_jaccard": 0.14282828282828283,
+        "n_fold_pairs": 10
+      },
+      "candidate_counts": [
+        32,
+        32,
+        32,
+        32,
+        32
+      ],
+      "best_selector_settings": [
+        {},
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    "gbfrs": {
+      "method": "gbfrs",
+      "n_rows": 252,
+      "n_features": 102,
+      "unit": "patient",
+      "metrics": {
+        "accuracy": {
+          "mean": 0.6865098039215687,
+          "sd": 0.05997346587447269
+        },
+        "f1_macro": {
+          "mean": 0.6700035236381138,
+          "sd": 0.05799346852903443
+        },
+        "balanced_accuracy": {
+          "mean": 0.6723005093378609,
+          "sd": 0.05461140848575771
+        },
+        "malignant_sensitivity": {
+          "mean": 0.6110526315789473,
+          "sd": 0.09854200279976792
+        },
+        "benign_specificity": {
+          "mean": 0.7335483870967743,
+          "sd": 0.11098837017568994
+        }
+      },
+      "mean_features": 12.2,
+      "stability": {
+        "nogueira": 0.6089671035817298,
+        "mean_pairwise_jaccard": 0.5069338504632621,
+        "n_fold_pairs": 10
+      },
+      "candidate_counts": [
+        32,
+        32,
+        32,
+        32,
+        32
+      ],
+      "best_selector_settings": [
+        {},
+        {},
+        {},
+        {},
+        {}
+      ]
+    },
+    "anova": {
+      "method": "anova",
+      "n_rows": 252,
+      "n_features": 102,
+      "unit": "patient",
+      "metrics": {
+        "accuracy": {
+          "mean": 0.7459607843137255,
+          "sd": 0.06256739541987555
+        },
+        "f1_macro": {
+          "mean": 0.7296493456009826,
+          "sd": 0.062325183930324525
+        },
+        "balanced_accuracy": {
+          "mean": 0.7293633276740238,
+          "sd": 0.06151773590031918
+        },
+        "malignant_sensitivity": {
+          "mean": 0.6542105263157894,
+          "sd": 0.105716130637705
+        },
+        "benign_specificity": {
+          "mean": 0.804516129032258,
+          "sd": 0.09660199733803763
+        }
+      },
+      "mean_features": 18,
+      "stability": {
+        "nogueira": 0.6761904761904762,
+        "mean_pairwise_jaccard": 0.5767731463383637,
+        "n_fold_pairs": 10
+      },
+      "candidate_counts": [
+        96,
+        96,
+        96,
+        96,
+        96
+      ],
+      "best_selector_settings": [
+        {
+          "k": 20
+        },
+        {
+          "k": 10
+        },
+        {
+          "k": 20
+        },
+        {
+          "k": 20
+        },
+        {
+          "k": 20
+        }
+      ]
+    },
+    "mutual_information": {
+      "method": "mutual_information",
+      "n_rows": 252,
+      "n_features": 102,
+      "unit": "patient",
+      "metrics": {
+        "accuracy": {
+          "mean": 0.7301960784313726,
+          "sd": 0.038436374224346814
+        },
+        "f1_macro": {
+          "mean": 0.7172347039749282,
+          "sd": 0.04286438749713654
+        },
+        "balanced_accuracy": {
+          "mean": 0.7201160158460668,
+          "sd": 0.04621443677905409
+        },
+        "malignant_sensitivity": {
+          "mean": 0.6742105263157895,
+          "sd": 0.09599673932597313
+        },
+        "benign_specificity": {
+          "mean": 0.7660215053763441,
+          "sd": 0.043529134201567475
+        }
+      },
+      "mean_features": 18,
+      "stability": {
+        "nogueira": 0.4265873015873014,
+        "mean_pairwise_jaccard": 0.35793546228328843,
+        "n_fold_pairs": 10
+      },
+      "candidate_counts": [
+        96,
+        96,
+        96,
+        96,
+        96
+      ],
+      "best_selector_settings": [
+        {
+          "k": 10
+        },
+        {
+          "k": 20
+        },
+        {
+          "k": 20
+        },
+        {
+          "k": 20
+        },
+        {
+          "k": 20
+        }
+      ]
+    },
+    "l1_logistic": {
+      "method": "l1_logistic",
+      "n_rows": 252,
+      "n_features": 102,
+      "unit": "patient",
+      "metrics": {
+        "accuracy": {
+          "mean": 0.7458039215686275,
+          "sd": 0.04456323992868086
+        },
+        "f1_macro": {
+          "mean": 0.7272067872715973,
+          "sd": 0.05840774770976698
+        },
+        "balanced_accuracy": {
+          "mean": 0.7297142048670062,
+          "sd": 0.06055801245551573
+        },
+        "malignant_sensitivity": {
+          "mean": 0.661578947368421,
+          "sd": 0.1614683317578553
+        },
+        "benign_specificity": {
+          "mean": 0.7978494623655913,
+          "sd": 0.08132331355350127
+        }
+      },
+      "mean_features": 9.6,
+      "stability": {
+        "nogueira": 0.6550324675324675,
+        "mean_pairwise_jaccard": 0.5353787878787879,
+        "n_fold_pairs": 10
+      },
+      "candidate_counts": [
+        64,
+        64,
+        64,
+        64,
+        64
+      ],
+      "best_selector_settings": [
+        {
+          "C": 0.1
+        },
+        {
+          "C": 0.1
+        },
+        {
+          "C": 0.1
+        },
+        {
+          "C": 0.1
+        },
+        {
+          "C": 0.1
+        }
+      ]
+    }
+  },
+  "failures": {},
+  "execution": {
+    "github_commit": "885bde25bee3f6070596cc4c5afb64b4bc30f554",
+    "run_url": "https://github.com/naazzarov/busbra-ultrasound-classification/actions/runs/40668315059",
+    "job_id": 122748402147,
+    "environment": "Ubuntu GitHub-hosted runner; model environment from unchanged uv.lock; Python 3.12 requested; jobs=2; native threads=1",
+    "validation": "completed: clinical coverage, image/mask geometry, finite features, within-cohort duplicate hashes, patient-disjoint nesting, OOF alignment and recomputed fold metrics"
+  }
+}

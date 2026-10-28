@@ -80,7 +80,7 @@ fails to increase by >1e-12, or candidates are exhausted. Ties retain column
 order. The changing normalizer permits stopping before all columns are used.
 
 The archive has no redistribution license and disagrees with Eq. 13. Its code
-is neither copied into src nor imported. See REFERENCE_AUDIT.md for the exact
+is neither copied into src nor imported by the primary reconstruction. See REFERENCE_AUDIT.md for the exact
 reference, differences and reproduction checks. Report this method as
 **paper-defined GBFRS with documented implementation adaptations**, never as an
 unmodified run of the authors' code. These adaptations mean results are not
@@ -97,5 +97,16 @@ not be added. total_seconds is the non-overlapping fold wall time. Runtime
 comparison uses total_seconds; candidate workers share memory with native
 BLAS/OpenMP limited to one thread. Package versions and hardware are recorded.
 
-All real-data artifacts, including aggregate scores, stay local. Publication
-contains source, synthetic software checks, citations and protocol only.
+The frozen table, identifiers, row-level predictions, model files and per-fold
+selected-feature exports stay local. The paper release intentionally publishes
+only aggregate scores, descriptive stability, conditional bootstrap intervals
+and derived figures. See STATISTICAL_ANALYSIS.md for their interpretation.
+
+## Secondary private reference execution — 2026-10-28
+
+The optional secondary wrapper verifies the inspected author script SHA-256 before
+importing it privately, and calls its unchanged selector with training-only geometry,
+purity 0.90 and NumPy seed 42. The source is never copied into this repository or
+exports. The independent primary reconstruction is unchanged. See SECONDARY_STUDY.md
+for completed nested WDBC results, resource-limit reporting, and the synthetic
+criterion audit. This is not a reproduction of the original classifier or tables.

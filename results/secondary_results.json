@@ -1,0 +1,621 @@
+{
+  "protocol_id": "BUSBRA-SECONDARY-20261028-V1",
+  "scope": "Secondary descriptive experiments; not a public preregistration or external ultrasound validation.",
+  "wdbc_source": "UCI WDBC DOI 10.24432/C5DW2B, bundled with scikit-learn 1.6.1; cytology, case-level folds",
+  "search_budget": "96 joint candidates for ANOVA/MI/L1; 32 for fixed selectors; not matched compute",
+  "datasets": {
+    "busbra": {
+      "dataset_sha256": "7f22dccf4be1f8920a0e9fbd46ae31ed814f1be138e55dc936b00b76d67324ef",
+      "unit": "patient",
+      "n_rows": 1875,
+      "n_features": 288,
+      "methods": {
+        "anova": {
+          "method": "anova",
+          "n_rows": 1875,
+          "n_features": 288,
+          "unit": "patient",
+          "metrics": {
+            "accuracy": {
+              "mean": 0.8592384586669667,
+              "sd": 0.03159779514677283
+            },
+            "f1_macro": {
+              "mean": 0.8390701816704572,
+              "sd": 0.04201387689083745
+            },
+            "balanced_accuracy": {
+              "mean": 0.8428914648444158,
+              "sd": 0.05168663333339126
+            },
+            "malignant_sensitivity": {
+              "mean": 0.7960410604561565,
+              "sd": 0.11055617672254632
+            },
+            "benign_specificity": {
+              "mean": 0.8897418692326751,
+              "sd": 0.01221141073825083
+            }
+          },
+          "mean_features": 11.0,
+          "stability": {
+            "nogueira": 0.5557597637020019,
+            "mean_pairwise_jaccard": 0.5318181818181819,
+            "n_fold_pairs": 10
+          },
+          "candidate_counts": [
+            96,
+            96,
+            96,
+            96,
+            96
+          ],
+          "best_selector_settings": [
+            {
+              "k": 20
+            },
+            {
+              "k": 5
+            },
+            {
+              "k": 20
+            },
+            {
+              "k": 5
+            },
+            {
+              "k": 5
+            }
+          ]
+        },
+        "mutual_information": {
+          "method": "mutual_information",
+          "n_rows": 1875,
+          "n_features": 288,
+          "unit": "patient",
+          "metrics": {
+            "accuracy": {
+              "mean": 0.866768675346737,
+              "sd": 0.04320183814292804
+            },
+            "f1_macro": {
+              "mean": 0.8468881834321559,
+              "sd": 0.048836498764535614
+            },
+            "balanced_accuracy": {
+              "mean": 0.8446541815793287,
+              "sd": 0.04807456777075052
+            },
+            "malignant_sensitivity": {
+              "mean": 0.7815332491593032,
+              "sd": 0.07063982873329507
+            },
+            "benign_specificity": {
+              "mean": 0.9077751139993542,
+              "sd": 0.04147279300228123
+            }
+          },
+          "mean_features": 9.0,
+          "stability": {
+            "nogueira": 0.5412186379928314,
+            "mean_pairwise_jaccard": 0.4613636363636363,
+            "n_fold_pairs": 10
+          },
+          "candidate_counts": [
+            96,
+            96,
+            96,
+            96,
+            96
+          ],
+          "best_selector_settings": [
+            {
+              "k": 5
+            },
+            {
+              "k": 10
+            },
+            {
+              "k": 5
+            },
+            {
+              "k": 20
+            },
+            {
+              "k": 5
+            }
+          ]
+        },
+        "l1_logistic": {
+          "method": "l1_logistic",
+          "n_rows": 1875,
+          "n_features": 288,
+          "unit": "patient",
+          "metrics": {
+            "accuracy": {
+              "mean": 0.8620412784242195,
+              "sd": 0.028533761359436752
+            },
+            "f1_macro": {
+              "mean": 0.8447431034788873,
+              "sd": 0.03229423381535787
+            },
+            "balanced_accuracy": {
+              "mean": 0.8505165247750076,
+              "sd": 0.03507319432049856
+            },
+            "malignant_sensitivity": {
+              "mean": 0.8179751171244816,
+              "sd": 0.05874719324716637
+            },
+            "benign_specificity": {
+              "mean": 0.8830579324255335,
+              "sd": 0.02295338765171506
+            }
+          },
+          "mean_features": 30.8,
+          "stability": {
+            "nogueira": 0.09474662196279582,
+            "mean_pairwise_jaccard": 0.21099483336172145,
+            "n_fold_pairs": 10
+          },
+          "candidate_counts": [
+            96,
+            96,
+            96,
+            96,
+            96
+          ],
+          "best_selector_settings": [
+            {
+              "C": 0.1
+            },
+            {
+              "C": 0.01
+            },
+            {
+              "C": 0.1
+            },
+            {
+              "C": 1.0
+            },
+            {
+              "C": 0.01
+            }
+          ]
+        },
+        "author_gbfrs": {
+          "method": "author_gbfrs",
+          "n_rows": 1875,
+          "n_features": 288,
+          "unit": "patient",
+          "metrics": {
+            "accuracy": {
+              "mean": 0.5730181603465541,
+              "sd": 0.04339281236523073
+            },
+            "f1_macro": {
+              "mean": 0.5034093717720662,
+              "sd": 0.03957018204192239
+            },
+            "balanced_accuracy": {
+              "mean": 0.5195802085657503,
+              "sd": 0.030493451243905033
+            },
+            "malignant_sensitivity": {
+              "mean": 0.3665832485331214,
+              "sd": 0.19195413230455208
+            },
+            "benign_specificity": {
+              "mean": 0.672577168598379,
+              "sd": 0.14888238436417217
+            }
+          },
+          "mean_features": 1.8,
+          "stability": {
+            "nogueira": 0.32914046121593266,
+            "mean_pairwise_jaccard": 0.4,
+            "n_fold_pairs": 10
+          },
+          "candidate_counts": [
+            32,
+            32,
+            32,
+            32,
+            32
+          ],
+          "best_selector_settings": [
+            {},
+            {},
+            {},
+            {},
+            {}
+          ]
+        }
+      },
+      "reference_agreement": null,
+      "failures": {},
+      "validation": "passed: alignment, labels, folds, metrics, counts and snapshot hashes"
+    },
+    "wdbc": {
+      "dataset_sha256": "a5445fe1309067463a5eca3cce2c6937633bf991d6daa5a46edf66f78fe67209",
+      "unit": "case",
+      "n_rows": 569,
+      "n_features": 30,
+      "methods": {
+        "baseline": {
+          "method": "baseline",
+          "n_rows": 569,
+          "n_features": 30,
+          "unit": "case",
+          "metrics": {
+            "accuracy": {
+              "mean": 0.9789318428815401,
+              "sd": 0.024488961107362137
+            },
+            "f1_macro": {
+              "mean": 0.9772142675591651,
+              "sd": 0.02647739828220693
+            },
+            "balanced_accuracy": {
+              "mean": 0.9746424932021067,
+              "sd": 0.02943957942053337
+            },
+            "malignant_sensitivity": {
+              "mean": 0.9576965669988926,
+              "sd": 0.05060102293419694
+            },
+            "benign_specificity": {
+              "mean": 0.9915884194053209,
+              "sd": 0.012575980563728799
+            }
+          },
+          "mean_features": 30.0,
+          "stability": {
+            "nogueira": 1.0,
+            "mean_pairwise_jaccard": 1.0,
+            "n_fold_pairs": 10
+          },
+          "candidate_counts": [
+            32,
+            32,
+            32,
+            32,
+            32
+          ],
+          "best_selector_settings": [
+            {},
+            {},
+            {},
+            {},
+            {}
+          ]
+        },
+        "fuzzy_rough": {
+          "method": "fuzzy_rough",
+          "n_rows": 569,
+          "n_features": 30,
+          "unit": "case",
+          "metrics": {
+            "accuracy": {
+              "mean": 0.9490607048594939,
+              "sd": 0.0156140158679633
+            },
+            "f1_macro": {
+              "mean": 0.9455208585235122,
+              "sd": 0.017141266513832285
+            },
+            "balanced_accuracy": {
+              "mean": 0.9470564992019298,
+              "sd": 0.022196902873946274
+            },
+            "malignant_sensitivity": {
+              "mean": 0.9388704318936878,
+              "sd": 0.05626847397534663
+            },
+            "benign_specificity": {
+              "mean": 0.9552425665101723,
+              "sd": 0.02295593823986342
+            }
+          },
+          "mean_features": 5.6,
+          "stability": {
+            "nogueira": 0.4072014051522246,
+            "mean_pairwise_jaccard": 0.3601984126984127,
+            "n_fold_pairs": 10
+          },
+          "candidate_counts": [
+            32,
+            32,
+            32,
+            32,
+            32
+          ],
+          "best_selector_settings": [
+            {},
+            {},
+            {},
+            {},
+            {}
+          ]
+        },
+        "gbfrs": {
+          "method": "gbfrs",
+          "n_rows": 569,
+          "n_features": 30,
+          "unit": "case",
+          "metrics": {
+            "accuracy": {
+              "mean": 0.9631113181183046,
+              "sd": 0.019972687881797423
+            },
+            "f1_macro": {
+              "mean": 0.9603205166348306,
+              "sd": 0.02173206094736378
+            },
+            "balanced_accuracy": {
+              "mean": 0.9591987974357774,
+              "sd": 0.025594755229098425
+            },
+            "malignant_sensitivity": {
+              "mean": 0.9436323366555925,
+              "sd": 0.053604719511396844
+            },
+            "benign_specificity": {
+              "mean": 0.9747652582159624,
+              "sd": 0.01837978035453265
+            }
+          },
+          "mean_features": 4.8,
+          "stability": {
+            "nogueira": 0.7023809523809523,
+            "mean_pairwise_jaccard": 0.6011904761904762,
+            "n_fold_pairs": 10
+          },
+          "candidate_counts": [
+            32,
+            32,
+            32,
+            32,
+            32
+          ],
+          "best_selector_settings": [
+            {},
+            {},
+            {},
+            {},
+            {}
+          ]
+        },
+        "anova": {
+          "method": "anova",
+          "n_rows": 569,
+          "n_features": 30,
+          "unit": "case",
+          "metrics": {
+            "accuracy": {
+              "mean": 0.9789318428815401,
+              "sd": 0.014662041190869262
+            },
+            "f1_macro": {
+              "mean": 0.9772000899541313,
+              "sd": 0.016113162369368415
+            },
+            "balanced_accuracy": {
+              "mean": 0.9746424932021067,
+              "sd": 0.021383533202123932
+            },
+            "malignant_sensitivity": {
+              "mean": 0.9576965669988926,
+              "sd": 0.05060102293419694
+            },
+            "benign_specificity": {
+              "mean": 0.9915884194053209,
+              "sd": 0.012575980563728799
+            }
+          },
+          "mean_features": 20.0,
+          "stability": {
+            "nogueira": 1.0,
+            "mean_pairwise_jaccard": 1.0,
+            "n_fold_pairs": 10
+          },
+          "candidate_counts": [
+            96,
+            96,
+            96,
+            96,
+            96
+          ],
+          "best_selector_settings": [
+            {
+              "k": 20
+            },
+            {
+              "k": 20
+            },
+            {
+              "k": 20
+            },
+            {
+              "k": 20
+            },
+            {
+              "k": 20
+            }
+          ]
+        },
+        "mutual_information": {
+          "method": "mutual_information",
+          "n_rows": 569,
+          "n_features": 30,
+          "unit": "case",
+          "metrics": {
+            "accuracy": {
+              "mean": 0.9736686849868033,
+              "sd": 0.010711694066158255
+            },
+            "f1_macro": {
+              "mean": 0.971983137950074,
+              "sd": 0.01143380844556699
+            },
+            "balanced_accuracy": {
+              "mean": 0.9742192821008739,
+              "sd": 0.011339466045217423
+            },
+            "malignant_sensitivity": {
+              "mean": 0.9764119601328904,
+              "sd": 0.023536251437286576
+            },
+            "benign_specificity": {
+              "mean": 0.9720266040688577,
+              "sd": 0.01713195152254407
+            }
+          },
+          "mean_features": 20.0,
+          "stability": {
+            "nogueira": 0.8049999999999999,
+            "mean_pairwise_jaccard": 0.8787878787878789,
+            "n_fold_pairs": 10
+          },
+          "candidate_counts": [
+            96,
+            96,
+            96,
+            96,
+            96
+          ],
+          "best_selector_settings": [
+            {
+              "k": 20
+            },
+            {
+              "k": 20
+            },
+            {
+              "k": 20
+            },
+            {
+              "k": 20
+            },
+            {
+              "k": 20
+            }
+          ]
+        },
+        "l1_logistic": {
+          "method": "l1_logistic",
+          "n_rows": 569,
+          "n_features": 30,
+          "unit": "case",
+          "metrics": {
+            "accuracy": {
+              "mean": 0.9701599130569788,
+              "sd": 0.013272588410008878
+            },
+            "f1_macro": {
+              "mean": 0.9679844096180028,
+              "sd": 0.014227120668170704
+            },
+            "balanced_accuracy": {
+              "mean": 0.9666864234502622,
+              "sd": 0.015393101711573069
+            },
+            "malignant_sensitivity": {
+              "mean": 0.9529346622369879,
+              "sd": 0.037390792948248354
+            },
+            "benign_specificity": {
+              "mean": 0.9804381846635367,
+              "sd": 0.02326458332913695
+            }
+          },
+          "mean_features": 14.2,
+          "stability": {
+            "nogueira": 0.6790871813157424,
+            "mean_pairwise_jaccard": 0.7140639589169001,
+            "n_fold_pairs": 10
+          },
+          "candidate_counts": [
+            96,
+            96,
+            96,
+            96,
+            96
+          ],
+          "best_selector_settings": [
+            {
+              "C": 1.0
+            },
+            {
+              "C": 1.0
+            },
+            {
+              "C": 1.0
+            },
+            {
+              "C": 1.0
+            },
+            {
+              "C": 1.0
+            }
+          ]
+        },
+        "author_gbfrs": {
+          "method": "author_gbfrs",
+          "n_rows": 569,
+          "n_features": 30,
+          "unit": "case",
+          "metrics": {
+            "accuracy": {
+              "mean": 0.845225896599907,
+              "sd": 0.09513738159178957
+            },
+            "f1_macro": {
+              "mean": 0.8366144806862661,
+              "sd": 0.09735498623029727
+            },
+            "balanced_accuracy": {
+              "mean": 0.8400170402258512,
+              "sd": 0.09342752417517347
+            },
+            "malignant_sensitivity": {
+              "mean": 0.8198228128460687,
+              "sd": 0.11002508828399246
+            },
+            "benign_specificity": {
+              "mean": 0.8602112676056338,
+              "sd": 0.1127451128368849
+            }
+          },
+          "mean_features": 2.8,
+          "stability": {
+            "nogueira": 0.21218487394957952,
+            "mean_pairwise_jaccard": 0.18166666666666667,
+            "n_fold_pairs": 10
+          },
+          "candidate_counts": [
+            32,
+            32,
+            32,
+            32,
+            32
+          ],
+          "best_selector_settings": [
+            {},
+            {},
+            {},
+            {},
+            {}
+          ]
+        }
+      },
+      "reference_agreement": {
+        "prediction_agreement_fraction": 0.843585237258348,
+        "mean_feature_jaccard": 0.11333333333333333
+      },
+      "failures": {},
+      "validation": "passed: alignment, labels, folds, metrics, counts and snapshot hashes"
+    }
+  }
+}

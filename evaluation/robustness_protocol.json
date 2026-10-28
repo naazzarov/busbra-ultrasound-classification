@@ -1,0 +1,27 @@
+{
+  "protocol_id": "BUSBRA-ROBUSTNESS-20261028-V1",
+  "status": "specified after prior primary and secondary results, before these new outcomes; exploratory, not public preregistration",
+  "primary_protocol_unchanged": true,
+  "data": "Frozen BUS-BRA CSV and supplied five patient-disjoint outer folds; no changes to predictor values",
+  "inner_search": "same 32 SVM settings, three StratifiedGroupKFold splits; no tuning on outer outcomes",
+  "label_noise": {
+    "rates": [0.1, 0.2],
+    "methods": ["baseline", "fuzzy_rough", "gbfrs"],
+    "seed": 42,
+    "rule": "Within each outer training partition, flip floor(rate * number of patients in each original diagnosis) whole patient groups, with RandomState(42+outer_fold), sorted group keys. The same corrupted labels enter inner fitting and validation. Outer test labels remain unchanged. Rebuild inner stratification from corrupted labels.",
+    "scope": "One corruption draw per outer fold/rate, shared across methods; descriptive stress test, not a population noise-robustness guarantee"
+  },
+  "controlled_gbfrs_ablation": {
+    "criterion": ["own_ball", "class_extreme_neighbor_weight"],
+    "construction": "identical reconstruction balls, purity0.90 seed42, minmax geometry and normalized stopping",
+    "question": "Change dependency expression only; not a full reproduction of author software"
+  },
+  "gbfrs_sensitivity": {
+    "purity_fixed_runs": [0.8, 0.95],
+    "seed_fixed_runs": [43, 44],
+    "reference": "unchanged primary purity0.90 seed42",
+    "rule": "Separate prespecified sensitivity runs; do not choose a new best setting from their outer scores"
+  },
+  "failure_policy": "Record failures without fallback or silent source changes",
+  "independent_ultrasound": "Attempt official BrEaST access. Missing original BUS-BRA extraction configuration prevents exact frozen-model external validation. Any new extraction study must have its own protocol, source hashes, and be labeled independent-cohort method evaluation."
+}

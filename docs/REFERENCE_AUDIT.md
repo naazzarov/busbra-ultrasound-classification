@@ -9,7 +9,7 @@ Verified on 2026-10-19 against the PDF and author-linked GitHub archive.
 - Inspected author commit: 0382e0899b0dc5529c89d1b9a11da198464d49ad.
 - Archive GBFRS_github(2).rar contains only GBFRS_github/GBFRS.py.
 - No LICENSE or permission notice is present in the repository or archive.
-  The archive stays in ignored private_handoff; it is not vendored or imported.
+  The archive stays in ignored private_handoff; it is not vendored or imported by the primary reconstruction.
 - Definition 3: mean center, mean-distance radius, majority label/purity.
 - Algorithm 1: initial clustering, purity splitting, heterogeneous overlap
   removal, then forward search on fixed ball memberships.
@@ -50,3 +50,20 @@ is preserved separately as an unchanged local acceptance check. It does not
 prove nested fitting or validate all timing and parameter details; tests audit
 training boundaries in addition to running that checker. The BUS-BRA source
 license is absent from this handoff. No source or derived data is redistributed.
+
+## Secondary private reference execution — 2026-10-28
+
+The optional secondary wrapper verifies the inspected author script SHA-256 before
+importing it privately, and calls its unchanged selector with training-only geometry,
+purity 0.90 and NumPy seed 42. The source is never copied into this repository or
+exports. The independent primary reconstruction is unchanged. See SECONDARY_STUDY.md
+for completed nested WDBC results, resource-limit reporting, and the synthetic
+criterion audit. This is not a reproduction of the original classifier or tables.
+
+## Controlled criterion ablation
+
+With ball construction and nesting held fixed, the independently coded inspected
+criterion gives BUS-BRA mean macro-F1 0.5051 and 1.8 mean predictors, versus 0.8540
+and 13.0 for own-ball weighting. This isolates a criterion effect within the
+reconstruction, rather than attributing every full-program difference to it.
+All eleven robustness runs completed; see EXPANDED_STUDY.md for scope and limits.
