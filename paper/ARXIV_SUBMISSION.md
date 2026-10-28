@@ -31,8 +31,8 @@ endorsement. No submission or license selection has been made by this workflow.
 
 Before finalizing, confirm that all named authors approve submission and choose a
 license you can grant. Leave journal reference and publication DOI blank unless
-there is an actual publication to reference. Significant assistance remains
-briefly disclosed; scientific limitations have not been removed for presentation.
+there is an actual publication to reference. Review the significant-tool disclosure requirements in the linked moderation
+policy before upload. Scientific limitations have not been removed for presentation.
 
 Official guidance checked on 28 October 2026:
 

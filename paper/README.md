@@ -49,9 +49,7 @@ python tools/secondary_paper_assets.py
 
 The names/order and Luo Chuan acknowledgment came from the requester. Confirm name
 spellings, affiliations, contact details, research contributions, funding and
-competing-interest statements with all named authors. The manuscript explicitly
-discloses AI assistance; the authors must review its contents and
-accept responsibility. No institutional approval or funding has been invented.
+competing-interest statements with all named authors. The authors must review the manuscript and accept responsibility for its contents. No institutional approval or funding has been invented.
 
 The primary and additional-baseline experiments are complete, and the unchanged
 private author selector has been evaluated on both BUS-BRA and WDBC. The independent BrEaST cohort now supplies additional method evidence;
