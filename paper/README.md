@@ -50,7 +50,7 @@ python tools/secondary_paper_assets.py
 The names/order and Luo Chuan acknowledgment came from the requester. Confirm name
 spellings, affiliations, contact details, research contributions, funding and
 competing-interest statements with all named authors. The manuscript explicitly
-discloses substantial Codex assistance; the authors must review its contents and
+discloses AI assistance; the authors must review its contents and
 accept responsibility. No institutional approval or funding has been invented.
 
 The primary and additional-baseline experiments are complete, and the unchanged
@@ -59,3 +59,11 @@ validation and human scientific review remain necessary. All conditional interva
 and methodological qualifications should remain visible. `cs.LG` is a plausible
 arXiv category; classification, endorsement and acceptance remain arXiv decisions.
 No arXiv submission has been made by this workflow.
+
+## Conference literature update
+
+The related-work section includes verified conference publications from AISTATS
+2024, ICML 2024, NeurIPS 2025 and MICCAI 2025. These are contextual references, not
+methods evaluated in this study. Foundational method citations are retained.
+The abstract links directly to the public project repository. See
+`../docs/CONFERENCE_REFERENCES.md` for the official publication records.
