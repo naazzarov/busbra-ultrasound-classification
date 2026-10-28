@@ -53,3 +53,64 @@ def test_source_column_spelling_is_normalized_without_reading_predictor_metadata
     monkeypatch.setattr(extract.pd,'read_excel',lambda *args,**kwargs:source)
     normalized=extract.read_clinical('unused')
     assert {'Case_ID','Image_filename','Mask_tumor_filename','Classification'}<=set(normalized)
+
+
+def test_download_retries_timeout_without_publishing_partial_data(tmp_path, monkeypatch):
+    import io
+    import urllib.error
+    extract = load_tool('extract_breast')
+    response = io.BytesIO(b'complete')
+    response.headers = {'Content-Length': '8'}
+    calls = []
+    def open_source(*args, **kwargs):
+        calls.append(kwargs['timeout'])
+        if len(calls) == 1:
+            raise urllib.error.URLError(TimeoutError())
+        return response
+    monkeypatch.setattr(extract.urllib.request, 'urlopen', open_source)
+    monkeypatch.setattr(extract.time, 'sleep', lambda delay: None)
+    target = tmp_path / 'release.zip'
+    extract.download('https://example.test/release', target)
+    assert target.read_bytes() == b'complete'
+    assert calls == [60, 60]
+    assert list(tmp_path.iterdir()) == [target]
+
+
+def test_download_exhaustion_removes_partial_files(tmp_path, monkeypatch):
+    import io
+    extract = load_tool('extract_breast')
+    def incomplete(*args, **kwargs):
+        response = io.BytesIO(b'partial')
+        response.headers = {'Content-Length': '100'}
+        return response
+    monkeypatch.setattr(extract.urllib.request, 'urlopen', incomplete)
+    monkeypatch.setattr(extract.time, 'sleep', lambda delay: None)
+    with pytest.raises(extract.http.client.IncompleteRead):
+        extract.download('https://example.test/release', tmp_path / 'release.zip')
+    assert not list(tmp_path.iterdir())
+
+
+def test_download_does_not_retry_missing_release(tmp_path, monkeypatch):
+    import urllib.error
+    extract = load_tool('extract_breast')
+    calls = []
+    def missing(*args, **kwargs):
+        calls.append(1)
+        raise urllib.error.HTTPError('https://example.test', 404, 'missing', {}, None)
+    monkeypatch.setattr(extract.urllib.request, 'urlopen', missing)
+    with pytest.raises(urllib.error.HTTPError):
+        extract.download('https://example.test/release', tmp_path / 'release.zip')
+    assert len(calls) == 1
+    assert not list(tmp_path.iterdir())
+
+
+def test_download_preserves_existing_destination(tmp_path, monkeypatch):
+    extract = load_tool('extract_breast')
+    target = tmp_path / 'release.zip'
+    target.write_bytes(b'prior source')
+    def unexpected(*args, **kwargs):
+        pytest.fail('Existing source must be checked before network access')
+    monkeypatch.setattr(extract.urllib.request, 'urlopen', unexpected)
+    with pytest.raises(FileExistsError):
+        extract.download('https://example.test/release', target)
+    assert target.read_bytes() == b'prior source'

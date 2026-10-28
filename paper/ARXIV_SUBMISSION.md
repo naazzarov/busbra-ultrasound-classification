@@ -8,12 +8,19 @@ The abstract is 1,395 ASCII characters, below arXiv's 1,920-character metadata l
 Upload a source ZIP with exactly these files at its root/relative paths:
 
 - `main.tex`
-- `generated.tex`
-- `secondary_generated.tex`
-- `expanded_generated.tex`
 - `figures/performance-reduction.png`
 - `figures/paired-effects.png`
 - `figures/label-noise.png`
+
+Build this four-file upload bundle with:
+
+```bash
+python tools/prepare_arxiv.py --output /path/to/submission/Source
+```
+
+The repository keeps modular table definitions for reproducibility; the packaging
+script puts those definitions directly into the delivered `main.tex`. The result
+values and prose are unchanged by packaging.
 
 The bibliography is embedded in `main.tex`; no external `.bib` or `.bbl` is needed.
 Use `main.tex` as the top-level document and PDFLaTeX as the processor. The source

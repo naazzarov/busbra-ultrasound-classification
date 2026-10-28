@@ -8,13 +8,50 @@ on:
       - 'evaluation/extraction-requirements.txt'
       - 'tools/extract_breast.py'
       - 'tools/run_external.py'
+      - 'src/busbra/**'
+      - 'pyproject.toml'
+      - 'uv.lock'
   workflow_dispatch:
 
 permissions:
   contents: read
 
+concurrency:
+  group: external-ultrasound-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      required: ${{ steps.check.outputs.required }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          fetch-depth: 0
+      - name: Check whether this update changes benchmark code
+        id: check
+        env:
+          EVENT_NAME: ${{ github.event_name }}
+          EVENT_ACTION: ${{ github.event.action }}
+          PREVIOUS_HEAD: ${{ github.event.before }}
+        shell: bash
+        run: |
+          required=true
+          if [[ "$EVENT_NAME" == pull_request && "$EVENT_ACTION" == synchronize ]] &&
+             git cat-file -e "${PREVIOUS_HEAD}^{commit}" 2>/dev/null; then
+            if git diff --quiet "$PREVIOUS_HEAD" HEAD -- \
+              .github/workflows/external-ultrasound.yml \
+              evaluation/external_ultrasound_protocol.json evaluation/extraction-requirements.txt \
+              tools/extract_breast.py tools/run_external.py src/busbra/ pyproject.toml uv.lock; then
+              required=false
+            fi
+          fi
+          echo "required=$required" >> "$GITHUB_OUTPUT"
   breast:
+    needs: changes
+    if: needs.changes.outputs.required == 'true'
     runs-on: ubuntu-latest
     timeout-minutes: 45
     env:

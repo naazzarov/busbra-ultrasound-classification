@@ -11,6 +11,10 @@ import json
 import logging
 from pathlib import Path
 import shutil
+import http.client
+import tempfile
+import time
+import urllib.error
 import urllib.request
 import zipfile
 
@@ -50,10 +54,36 @@ def feature_labels(table):
     return cohort,counts
 
 
-def download(url,path):
-    request=urllib.request.Request(url,headers={'User-Agent':'BUSBRA-independent-research/1.0'})
-    with urllib.request.urlopen(request,timeout=120) as response,Path(path).open('xb') as output:
-        shutil.copyfileobj(response,output)
+def download(url, path, *, attempts=3, timeout=60):
+    """Retry transient source failures; publish only a complete, exclusive file."""
+    path = Path(path)
+    if attempts < 1:
+        raise ValueError('attempts must be positive')
+    if path.exists():
+        raise FileExistsError(path)
+    request = urllib.request.Request(url, headers={'User-Agent': 'BUSBRA-independent-research/1.0'})
+    for attempt in range(attempts):
+        # The temporary file is owned by this attempt, and never used as a source.
+        with tempfile.NamedTemporaryFile(dir=path.parent, prefix=path.name + '.', suffix='.part') as output:
+            try:
+                with urllib.request.urlopen(request, timeout=timeout) as response:
+                    shutil.copyfileobj(response, output)
+                    expected = response.headers.get('Content-Length')
+                    if expected is not None and output.tell() != int(expected):
+                        raise http.client.IncompleteRead(b'', int(expected))
+            except urllib.error.HTTPError as error:
+                if error.code not in {408, 429, 500, 502, 503, 504} or attempt + 1 == attempts:
+                    raise
+            except (urllib.error.URLError, TimeoutError, ConnectionError, http.client.IncompleteRead):
+                if attempt + 1 == attempts:
+                    raise
+            else:
+                output.flush()
+                # Hard linking publishes atomically and refuses to overwrite an existing path.
+                path.hardlink_to(output.name)
+                return
+        logging.warning('Public data download interrupted; retrying attempt %s/%s', attempt + 2, attempts)
+        time.sleep(2 ** (attempt + 1))
 
 
 def main():
