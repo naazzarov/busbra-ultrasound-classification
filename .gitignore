@@ -285,3 +285,4 @@ paper/build/
 *.png
 !paper/figures/performance-reduction.png
 !paper/figures/paired-effects.png
+!paper/figures/label-noise.png

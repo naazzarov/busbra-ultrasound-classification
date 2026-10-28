@@ -59,3 +59,11 @@ purity 0.90 and NumPy seed 42. The source is never copied into this repository o
 exports. The independent primary reconstruction is unchanged. See SECONDARY_STUDY.md
 for completed nested WDBC results, resource-limit reporting, and the synthetic
 criterion audit. This is not a reproduction of the original classifier or tables.
+
+## Controlled criterion ablation
+
+With ball construction and nesting held fixed, the independently coded inspected
+criterion gives BUS-BRA mean macro-F1 0.5051 and 1.8 mean predictors, versus 0.8540
+and 13.0 for own-ball weighting. This isolates a criterion effect within the
+reconstruction, rather than attributing every full-program difference to it.
+All eleven robustness runs completed; see EXPANDED_STUDY.md for scope and limits.

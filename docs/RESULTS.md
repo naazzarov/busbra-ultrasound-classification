@@ -38,3 +38,10 @@ The original three results above remain the primary frozen comparison. See
 [secondary study](SECONDARY_STUDY.md) and `results/secondary_results.json` for three
 additional BUS-BRA selectors, seven WDBC pipelines and the pinned private reference
 audit. WDBC is a cytology method benchmark, not external ultrasound validation.
+
+## Controlled audit and independent ultrasound extension
+
+Eleven robustness/sensitivity/criterion runs and six independently retrained
+BrEaST ultrasound pipelines completed. See [expanded study](EXPANDED_STUDY.md),
+`results/robustness_results.json` and `results/external_ultrasound_results.json`.
+The primary results are unchanged; BrEaST is not frozen-model transfer testing.

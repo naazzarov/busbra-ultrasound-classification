@@ -54,8 +54,8 @@ discloses AI assistance; the authors must review its contents and
 accept responsibility. No institutional approval or funding has been invented.
 
 The primary and additional-baseline experiments are complete, and the unchanged
-private author selector has been evaluated on both BUS-BRA and WDBC. Independent external ultrasound
-validation and human scientific review remain necessary. All conditional intervals
+private author selector has been evaluated on both BUS-BRA and WDBC. The independent BrEaST cohort now supplies additional method evidence;
+frozen-model external testing and human scientific review remain necessary. All conditional intervals
 and methodological qualifications should remain visible. `cs.LG` is a plausible
 arXiv category; classification, endorsement and acceptance remain arXiv decisions.
 No arXiv submission has been made by this workflow.
@@ -67,3 +67,14 @@ The related-work section includes verified conference publications from AISTATS
 methods evaluated in this study. Foundational method citations are retained.
 The abstract links directly to the public project repository. See
 `../docs/CONFERENCE_REFERENCES.md` for the official publication records.
+
+## Controlled ablation, robustness and BrEaST extension
+
+The draft now includes eleven completed robustness/sensitivity/criterion runs and
+six completed pipelines on 252 BrEaST ultrasound patients, using a separately
+specified 102-feature extraction. This is independent-cohort method evaluation,
+not frozen-model transfer. See `../docs/EXPANDED_STUDY.md`.
+
+`expanded_generated.tex` and `figures/label-noise.png` are additional compilation
+inputs. Regenerate them with Matplotlib 3.10.8 using
+`python tools/expanded_paper_assets.py` from the repository root.

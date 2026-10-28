@@ -91,7 +91,8 @@ unique and complete held-out predictions, allowed selected columns, recomputed f
 metrics, candidate counts and source-snapshot hashes. Only aggregate quantities
 are exported. Timing is not presented as an isolated speed benchmark.
 
-Independent ultrasound validation, a broader dataset suite, verified author
+The later BrEaST extension adds independent ultrasound method evidence (see
+EXPANDED_STUDY.md). Frozen-model external testing, a broader dataset suite, verified author
 contributions/affiliations and human scientific review remain outstanding. This
 extension improves the evidence; it cannot guarantee publication or a score of
 10/10. No arXiv submission has been made.

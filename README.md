@@ -10,7 +10,8 @@ observed performance under patient-grouped nested evaluation.
 
 **Status:** all three complete real-data runs reproduced on 28 October 2026.
 Three additional selectors and a separate seven-method cytology benchmark extend the study.
-The paper is a research draft for author review, not an accepted publication.
+Eleven robustness/ablation runs and six pipelines on an independent ultrasound
+cohort are also complete. The paper remains a research draft for author review.
 The dataset, identifiers, row-level predictions and model artifacts remain private.
 
 ## Results at a glance
@@ -33,6 +34,31 @@ non-inferiority or clinical utility. The main observation is a substantial reduc
 in classifier inputs with close observed scores on this dataset.
 
 [Aggregate results](results/aggregate_results.json) · [Statistical interpretation](docs/STATISTICAL_ANALYSIS.md) · [Paper source](paper/main.tex)
+
+## Implementation audit and independent ultrasound evidence
+
+**31 dataset/method/settings runs and 155 outer evaluations are complete.**
+The extra runs are controlled analyses, not independent replications of BUS-BRA.
+
+- Changing only the GBFRS dependency expression, while keeping ball construction
+  fixed, changes macro-F1 from **0.8540 to 0.5051** and mean selected counts from
+  13.0 to 1.8. This isolates a substantial implementation effect.
+- With nominal 10% and 20% training-patient label corruption, GBFRS gives macro-F1
+  **0.8405 and 0.8181**. These are descriptive stress draws, not a robustness guarantee.
+- Six pipelines completed on **252 BrEaST ultrasound patients**, with a public,
+  separately specified 102-feature extraction. ANOVA scores **0.7296**, L1 selection
+  **0.7272**, and GBFRS **0.6700**. The evidence does not show a universal GBFRS advantage.
+
+BrEaST models are trained afresh: this is independent-cohort method evaluation,
+not external testing of a frozen BUS-BRA model. The missing original extraction
+configuration still prevents that exact transfer experiment. No private handoff
+or author source was sent to the public-data runner.
+
+[Expanded study](docs/EXPANDED_STUDY.md) · [Robustness aggregates](results/robustness_results.json) ·
+[Independent ultrasound aggregates](results/external_ultrasound_results.json) ·
+[Successful benchmark run](https://github.com/naazzarov/busbra-ultrasound-classification/actions/runs/40668315059)
+
+![Training-label stress test; error bars show fold SD](paper/figures/label-noise.svg)
 
 ## Reproduce the evaluation
 
@@ -108,8 +134,8 @@ uv run --locked python tools/run_secondary.py --dataset busbra --data /PRIVATE/P
 ```
 
 The runner records failures and wall-clock limits; it never substitutes a patched
-reference or reports partial runs as complete. Human author review and independent
-ultrasound validation remain outstanding.
+reference or reports partial runs as complete. Human author review and frozen-model
+external ultrasound testing remain outstanding.
 
 ## GBFRS implementation qualification
 
@@ -137,8 +163,9 @@ review before submission.
 
 The public JSON contains aggregate metrics only. The conditional bootstrap holds
 OOF predictions fixed and does not estimate all retraining uncertainty. Stability
-is descriptive across five overlapping training sets. There is no external cohort,
-clinical validation or new feature-selection algorithm claimed here.
+is descriptive across five overlapping training sets. BrEaST adds independently
+retrained ultrasound method evidence. Frozen-model external testing and clinical
+validation remain outstanding; no new feature-selection algorithm is claimed.
 
 ## Source, attribution and reuse
 

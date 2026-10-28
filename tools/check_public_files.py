@@ -9,7 +9,7 @@ PRIVATE_SUFFIXES = {".csv", ".tsv", ".xlsx", ".parquet", ".arrow", ".npy", ".npz
 PRIVATE_PARTS = {"private_handoff", "private_outputs", "source_data", "ready_dataset", "comparison_output", ".env"}
 PRIVATE_NAMES = {"run_info.json", "internal_run.json"}
 ROW_IDENTIFIER = re.compile(rb"\b(?:bus_\d{4}-[lrs]|case_\d{4})\b")
-PUBLIC_FIGURES = {"paper/figures/performance-reduction.png", "paper/figures/paired-effects.png"}
+PUBLIC_FIGURES = {"paper/figures/performance-reduction.png", "paper/figures/paired-effects.png", "paper/figures/label-noise.png"}
 
 
 def check():

@@ -12,18 +12,18 @@ from busbra.evaluation import EvaluationResult, classification_metrics
 from busbra.secondary import BenchmarkData, PROTOCOL, aggregate_secondary, load_wdbc
 
 
-def validate_run(root, data):
+def validate_run(root, data, expected_protocol=PROTOCOL):
     record = json.loads((root/'experiment.json').read_text())
     if record['status'] not in ('COMPLETED', 'COMPLETED_WITH_REPRODUCTION_BLOCKERS'):
         raise ValueError('Refuse incomplete secondary experiments')
     assert record['dataset_sha256'] == data.sha256
-    assert record['protocol_id'] == PROTOCOL
+    assert record['protocol_id'] == expected_protocol
     summaries, predictions, sets = {}, {}, {}
     for method, reported in record['methods'].items():
         folder = root/'submissions'/method
         details = json.loads((folder/'internal_run.json').read_text())
         assert details['dataset_sha256'] == data.sha256 and details['method'] == method
-        assert details['protocol_id'] == PROTOCOL and details['status'] == 'COMPLETED'
+        assert details['protocol_id'] == expected_protocol and details['status'] == 'COMPLETED'
         for name, digest in details['source_sha256'].items():
             assert hashlib.sha256((folder/'code'/'busbra'/name).read_bytes()).hexdigest() == digest
         prediction = pd.read_csv(folder/'predictions.csv')

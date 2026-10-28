@@ -105,3 +105,17 @@ The optional unchanged private author selector also completed BUS-BRA (five nest
 outer folds). All seven pipelines are now available for each dataset, with the
 original three BUS-BRA pipelines retained as the primary comparison. No reference
 run remains pending or is silently replaced.
+
+## Robustness and independent ultrasound extension — 2026-10-28
+
+Eleven additional BUS-BRA settings completed, including whole-patient label
+corruption, GBFRS purity/seed sensitivity and a controlled dependency criterion
+ablation. Six pipelines also completed on 252 independent BrEaST ultrasound
+patients, with a separate public 102-feature extraction. The corrected public-data
+workflow is green. The primary frozen experiment is unchanged. Source hashes,
+aggregate-only results and fitting-boundary checks are published; no private
+handoff data or private author source was sent to the runner.
+
+See EXPANDED_STUDY.md for the result interpretation and remaining limitations.
+The project has independent ultrasound method evidence, while exact external
+testing of a frozen BUS-BRA model and human author review remain incomplete.
