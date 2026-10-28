@@ -28,12 +28,16 @@ def digest(path):return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 def read_clinical(path):
     needed={'Case_ID','Image_filename','Mask_tumor_filename','Classification'}
+    canonical={''.join(c for c in name.lower() if c.isalnum()):name for name in needed}
+    observed={}
     for sheet in pd.ExcelFile(path).sheet_names:
         table=pd.read_excel(path,sheet_name=sheet)
+        observed[sheet]=[str(column) for column in table]
+        table=table.rename(columns={column:canonical.get(''.join(c for c in str(column).lower() if c.isalnum()),column) for column in table})
         if needed<=set(table):
             if len(table)!=256 or not table.Case_ID.is_unique:raise ValueError('Unexpected source case coverage')
             return table
-    raise ValueError('Clinical sheet does not match the documented schema')
+    raise ValueError('Clinical sheet does not match the documented schema; headers only: '+json.dumps(observed))
 
 
 def feature_labels(table):

@@ -42,3 +42,14 @@ def test_external_loader_checks_source_hash_and_patient_uniqueness(tmp_path):
     with pytest.raises(ValueError,match='fingerprint'):external.load_external(tmp_path)
     provenance()
     with pytest.raises(ValueError,match='coverage'):external.load_external(tmp_path)
+
+
+def test_source_column_spelling_is_normalized_without_reading_predictor_metadata(monkeypatch):
+    from types import SimpleNamespace
+    extract=load_tool('extract_breast')
+    source=pd.DataFrame({'CaseID':range(256),'Image filename':['synthetic']*256,
+                         'Mask_tumor_filename':['synthetic']*256,'Classification':['benign']*256})
+    monkeypatch.setattr(extract.pd,'ExcelFile',lambda path:SimpleNamespace(sheet_names=['source']))
+    monkeypatch.setattr(extract.pd,'read_excel',lambda *args,**kwargs:source)
+    normalized=extract.read_clinical('unused')
+    assert {'Case_ID','Image_filename','Mask_tumor_filename','Classification'}<=set(normalized)
