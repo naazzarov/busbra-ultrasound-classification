@@ -151,8 +151,7 @@ numerical replication of the author program or its published benchmark tables.
 ## Paper and analysis
 
 The draft is **Patient-Grouped Evaluation of Fuzzy-Rough Feature Selection for Breast
-Ultrasound Classification**, by Bahodir Nazarov, Zineb Gharib and Fatima Zazoul;
-Luo Chuan is acknowledged. Author details and research statements require author
+Ultrasound Classification**, by Bahodir Nazarov, Zineb Gharib, Fatima Zazoul and Luo Chuan. Author details and research statements require author
 review before submission.
 
 - [Manuscript and build instructions](paper/README.md)
