@@ -6,14 +6,17 @@ Authors (provided order): Bahodir Nazarov, Zineb Gharib, Fatima Zazoul.
 Acknowledgment: Luo Chuan.
 
 This is a research draft for author review, not an accepted or submitted paper.
-The study is an empirical comparison of three existing method families, with a
+The study compares three primary pipelines, adds three secondary baselines and a
+separate seven-pipeline cytology benchmark, with a
 qualified GBFRS reconstruction. It does not claim a new feature-selection
 algorithm, clinical validation, equivalence or statistically established superiority.
 
 ## Files and provenance
 
 - `main.tex`: complete manuscript; portable LaTeX with embedded bibliography.
-- `generated.tex`: exact numeric tables/macros generated from the aggregate JSON.
+- `generated.tex`: primary numeric tables/macros generated from aggregate JSON.
+- `secondary_generated.tex`: tables from validated secondary aggregate JSON.
+- `../tools/secondary_paper_assets.py`: secondary-table generator.
 - `figures/`: scientific plots generated from that same aggregate artifact.
 - `../results/aggregate_results.json`: aggregate-only results from the fresh full run.
 - `../tools/paper_assets.py`: figure/table generator; optional Matplotlib 3.10.8.
@@ -39,6 +42,7 @@ environment (the locked model environment is unchanged):
 ```bash
 python -m pip install matplotlib==3.10.8
 python tools/paper_assets.py --summary results/aggregate_results.json --output paper
+python tools/secondary_paper_assets.py
 ```
 
 ## Author review before submission
@@ -49,8 +53,9 @@ competing-interest statements with all named authors. The manuscript explicitly
 discloses substantial Codex assistance; the authors must review its contents and
 accept responsibility. No institutional approval or funding has been invented.
 
-The code/experiment are complete, but additional external validation and reference
-implementation checks would strengthen the research. All conditional intervals
+The primary and additional-baseline experiments are complete, and the unchanged
+private author selector has been evaluated on both BUS-BRA and WDBC. Independent external ultrasound
+validation and human scientific review remain necessary. All conditional intervals
 and methodological qualifications should remain visible. `cs.LG` is a plausible
 arXiv category; classification, endorsement and acceptance remain arXiv decisions.
 No arXiv submission has been made by this workflow.

@@ -1,0 +1,43 @@
+{
+  "reference_commit": "0382e0899b0dc5529c89d1b9a11da198464d49ad",
+  "source_sha256": "8f675c052aaaab5760a853112990022bf4f5ba7afa7bb3b54d903e9467ec5c9b",
+  "source_redistributed": false,
+  "dependency_fixture": {
+    "synthetic": true,
+    "centers": [
+      0.0,
+      0.2,
+      0.9
+    ],
+    "ball_labels": [
+      0,
+      0,
+      1
+    ],
+    "ball_weights": [
+      0.6,
+      0.3,
+      0.1
+    ],
+    "paper_own_ball_weighted": 0.82,
+    "unchanged_author_expression": 0.51,
+    "numerically_equivalent": false
+  },
+  "selector_fixture": {
+    "synthetic": true,
+    "n_rows": 60,
+    "n_features": 5,
+    "purity": 0.9,
+    "seed": 42,
+    "author_selected_indices": [
+      3,
+      2
+    ],
+    "reconstruction_selected_indices": [
+      3,
+      2,
+      1
+    ]
+  },
+  "scope": "Algebraic and software fixtures only. Separate BUS-BRA and WDBC nested SVM runs test the unchanged private reference. No claim to reproduce original classifier or accuracy tables."
+}

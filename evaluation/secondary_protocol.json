@@ -1,0 +1,22 @@
+{
+  "protocol_id": "BUSBRA-SECONDARY-20261028-V1",
+  "status": "specified before secondary outcome inspection; not a public preregistration",
+  "primary_protocol_unchanged": "BUSBRA-V1-OUTER5-INNER3-MACROF1",
+  "datasets": {
+    "busbra": "unchanged private frozen CSV; supplied five patient-disjoint folds",
+    "wdbc": "scikit-learn 1.6.1 bundled UCI WDBC, 569 cases and 30 cytology features; not an external ultrasound validation cohort"
+  },
+  "wdbc_outer_cv": "StratifiedKFold(5,shuffle=True,random_state=42); one case per row, no independently verified repeated-patient mapping",
+  "inner_cv": "StratifiedGroupKFold(3,shuffle=True,random_state=42+outer_fold)",
+  "svm_grid": "identical 32 candidate choices to the primary protocol",
+  "rank_selector_k": [5, 10, 20],
+  "mutual_information": {"random_state": 42, "n_neighbors": 3},
+  "l1_logistic_C": [0.01, 0.1, 1.0],
+  "l1_logistic": {"solver": "liblinear", "max_iter": 10000, "random_state": 42, "coefficient_threshold": 0.00001},
+  "gbfrs": {"purity": 0.9, "seed": 42, "definitions": "unchanged primary reconstruction"},
+  "author_gbfrs": "optional unchanged private author script, fixed purity 0.9, NumPy seed 42; never redistributed; report failure rather than silently patching it",
+  "selection": "joint inner mean macro-F1; ties mean accuracy, fewer features, configuration order, SVM grid order",
+  "search_budget_note": "Rank and L1 baselines have three selector settings crossed with 32 SVM settings, versus 32 for fixed selectors. This is not a matched-compute-budget comparison.",
+  "zero_feature_rule": "a selector setting producing zero features in an inner training fold is ineligible; do not invent a fallback feature",
+  "no_outer_tuning": true
+}

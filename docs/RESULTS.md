@@ -31,3 +31,10 @@ GBFRS is an independent paper-based reconstruction with documented adaptations. 
 The bootstrap conditions on fixed OOF predictions. Fold SD is not a confidence interval, and named-feature stability is descriptive across overlapping training sets. See `STATISTICAL_ANALYSIS.md`.
 
 Both the original handoff checker and the repository acceptance checker are run on the complete private submissions. Exact row-level artifacts stay private.
+
+## Secondary extension
+
+The original three results above remain the primary frozen comparison. See
+[secondary study](SECONDARY_STUDY.md) and `results/secondary_results.json` for three
+additional BUS-BRA selectors, seven WDBC pipelines and the pinned private reference
+audit. WDBC is a cytology method benchmark, not external ultrasound validation.

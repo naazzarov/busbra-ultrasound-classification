@@ -89,3 +89,19 @@ analyses. See RESULTS.md and STATISTICAL_ANALYSIS.md for limitations.
 The original team history and attribution are preserved. Paper author names/order
 were supplied by the requester; affiliations, contact details, individual
 contributions and research statements require author review before submission.
+
+## Extended evidence — 2026-10-28
+
+Three nested secondary baselines (ANOVA, mutual information and L1 logistic selection)
+completed all five supplied BUS-BRA folds. Seven pipelines completed a separate WDBC
+cytology benchmark, including an unchanged, hash-pinned author selector called only
+from a private local file. No author source is redistributed. The independent
+reconstruction and original primary protocol are unchanged. The reference criterion
+is now audited directly on synthetic inputs. See SECONDARY_STUDY.md and the validated
+aggregate-only secondary results. A different modality benchmark does not establish
+external ultrasound validity; author review and submission remain outstanding.
+
+The optional unchanged private author selector also completed BUS-BRA (five nested
+outer folds). All seven pipelines are now available for each dataset, with the
+original three BUS-BRA pipelines retained as the primary comparison. No reference
+run remains pending or is silently replaced.

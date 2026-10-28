@@ -9,6 +9,7 @@ whether the classifier can use far fewer measurements while retaining similar
 observed performance under patient-grouped nested evaluation.
 
 **Status:** all three complete real-data runs reproduced on 28 October 2026.
+Three additional selectors and a separate seven-method cytology benchmark extend the study.
 The paper is a research draft for author review, not an accepted publication.
 The dataset, identifiers, row-level predictions and model artifacts remain private.
 
@@ -77,13 +78,46 @@ clinical metadata, engineered predictors, PCA, global filtering, resampling or
 test-tuned decision threshold is introduced. All 288 named predictors remain
 available, including the 42 reported exact-value redundancies.
 
+## Extended experiments and reference audit
+
+The separately specified secondary study adds **ANOVA**, **mutual information** and
+**L1 logistic feature selection**, each followed by the same SVM grid. Their BUS-BRA
+mean macro-F1 scores are 0.8391, 0.8469 and 0.8447, with 11.0, 9.0 and 30.8 mean
+predictors. These selectors tune three settings inside the inner folds, giving 96
+joint candidates versus 32 for the fixed primary selectors; compute budgets differ.
+
+A separate **WDBC cytology benchmark** trains seven pipelines from scratch on 569
+cases and 30 predictors. The all-feature SVM achieves mean macro-F1 0.9772, compared
+with 0.9603 for the GBFRS reconstruction and 0.9455 for conventional fuzzy-rough
+selection. Thus neither fuzzy-rough method is uniformly preferable. WDBC is a
+method benchmark, **not external validation of an ultrasound model**.
+
+The pinned unchanged author selector completes both datasets: BUS-BRA macro-F1
+0.5034 with 1.8 mean predictors; WDBC macro-F1 0.8366 with 2.8 mean predictors.
+These outcomes apply to the declared wrapper and SVM evaluation setting. A synthetic criterion audit gives 0.82 for own-ball weighting
+and 0.51 for the inspected author expression. These implementations are explicitly
+not interchangeable. No third-party author source is distributed.
+
+[Secondary study](docs/SECONDARY_STUDY.md) · [Protocol](evaluation/secondary_protocol.json) ·
+[Validated aggregate results](results/secondary_results.json) · [Reference fixture](results/reference_audit.json)
+
+```bash
+uv run --locked python tools/run_secondary.py --dataset wdbc --output private_outputs/wdbc-new --jobs 2
+uv run --locked python tools/run_secondary.py --dataset busbra --data /PRIVATE/PATH/BUSBRA_features_ready.csv --output private_outputs/baselines-new --jobs 2
+# Optional private reference: add --author-code /PRIVATE/PATH/GBFRS.py and --methods author_gbfrs
+```
+
+The runner records failures and wall-clock limits; it never substitutes a patched
+reference or reports partial runs as complete. Human author review and independent
+ultrasound validation remain outstanding.
+
 ## GBFRS implementation qualification
 
 The GBFRS pipeline is an **independent reconstruction of the accessible 2025
 preprint**, with documented normalization, initialization, overlap handling and
 stopping choices. It uses the paper's own-ball-weighted dependency in Equation 13.
 The inspected author archive has no code license and computes a different dependency
-expression; it is neither imported nor redistributed. These results are not a
+expression. The primary pipeline does not import it. An optional, hash-pinned private reference runner is now available; the author source is never redistributed. These results are not a
 numerical replication of the author program or its published benchmark tables.
 
 [Method equations](docs/METHODS.md) · [Reference audit](docs/REFERENCE_AUDIT.md) · [Evaluation contract](evaluation/evaluation_contract.json)
