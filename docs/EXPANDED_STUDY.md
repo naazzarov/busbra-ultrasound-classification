@@ -103,3 +103,16 @@ Public artifacts:
 Human author review, contributions/affiliations and frozen-model external testing
 remain outstanding. There is no arXiv submission, accepted-paper claim, novel
 algorithm claim or guaranteed numeric project/paper rating.
+
+## Fresh-run reproducibility check
+
+The final-source [repeat run](https://github.com/naazzarov/busbra-ultrasound-classification/actions/runs/40671134242)
+also completed successfully. All reported model aggregates, including mean/SD
+performance, feature counts, stability and chosen selector settings, match the
+first successful run. Source-archive checksums, extraction versions and protocol
+checksum also match. The extracted feature CSV has a different byte checksum
+across the fresh runners; its cause has not been established by a row-level
+numerical comparison. Therefore bitwise extraction identity and exact individual
+prediction reproduction across those runners are not asserted. Each run records
+its own feature-table hash. This is a software re-execution check, not an
+additional independent clinical cohort or new scientific replication.
