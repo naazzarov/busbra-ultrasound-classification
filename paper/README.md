@@ -78,3 +78,11 @@ not frozen-model transfer. See `../docs/EXPANDED_STUDY.md`.
 `expanded_generated.tex` and `figures/label-noise.png` are additional compilation
 inputs. Regenerate them with Matplotlib 3.10.8 using
 `python tools/expanded_paper_assets.py` from the repository root.
+
+## arXiv packaging and title layout
+
+The title and author row now use a compact, venue-neutral layout. The source and
+PDF metadata use the same author order. The shortened abstract is also suitable
+for the arXiv metadata field. See [arXiv source instructions](ARXIV_SUBMISSION.md)
+for the exact seven-file bundle, compiler choice and current official guidance.
+The upload package is a local deliverable; no submission or acceptance is claimed.
