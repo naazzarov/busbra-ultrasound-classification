@@ -71,6 +71,21 @@ uv run --locked python tools/compare_results.py --root private_outputs/run-001
 
 Each output path must be new; the CLI refuses overwrites. Real experiments and
 comparison status are recorded only in local private outputs. No source data,
-patient identifiers, predictions, selected-feature exports, model files or
-real-data scores are included in the public repository. Synthetic test scores
+patient identifiers, predictions, selected-feature exports or model files are
+included in the public repository. The paper release intentionally includes only
+aggregate real-data scores and derived plots. Synthetic test scores
 are software checks, never research results or CV performance claims.
+
+## Paper and repeat execution — 2026-10-28
+
+All three methods were re-executed sequentially using the unchanged model definitions,
+frozen CSV, supplied patient-grouped folds and full 32-candidate search. The private
+run manifest records completion of all three methods. The paper release adds
+aggregate-only conditional patient-bootstrap intervals and descriptive feature
+stability, plus a local LaTeX manuscript and scientific figures. These secondary
+analyses were added after the initial results and are not preregistered confirmatory
+analyses. See RESULTS.md and STATISTICAL_ANALYSIS.md for limitations.
+
+The original team history and attribution are preserved. Paper author names/order
+were supplied by the requester; affiliations, contact details, individual
+contributions and research statements require author review before submission.

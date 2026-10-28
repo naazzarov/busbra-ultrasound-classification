@@ -1,0 +1,177 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern,amsmath,amssymb,booktabs,graphicx,microtype}
+\usepackage[hidelinks]{hyperref}
+\usepackage{url}
+\setlength{\parskip}{0.35em}
+\setlength{\parindent}{0pt}
+\input{generated.tex}
+\title{Patient-Grouped Evaluation of Fuzzy-Rough Feature Selection for Breast Ultrasound Classification}
+\author{Bahodir Nazarov \and Zineb Gharib \and Fatima Zazoul}
+\date{Research draft -- 28 October 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+Radiomic classification can use many correlated measurements, making the number and stability of selected predictors relevant alongside discrimination. We compare an all-feature support vector machine (SVM), conventional fuzzy-rough QuickReduct followed by an SVM, and an independently implemented granular-ball fuzzy-rough selector followed by an SVM. The study uses a frozen BUS-BRA-derived table of 1,875 ultrasound images from 1,064 patient groups and 288 named predictors. Five supplied patient-disjoint outer folds estimate image-level performance; all scaling, supervised selection and SVM tuning occur within training partitions, using three patient-grouped inner folds and the same 32-candidate SVM grid. Mean outer-fold macro-F1 is \BaselineFone{} for the baseline, \FuzzyFone{} for conventional fuzzy-rough selection and \GBFone{} for the granular-ball reconstruction. The selectors retain means of \FuzzyFeatures{} and \GBFeatures{} features, respectively, reducing classifier input counts by \FuzzyReduction\% and \GBReduction\%. We additionally report patient-cluster bootstrap intervals for fixed out-of-fold predictions and descriptive feature-set stability. The close point estimates support further investigation of compact predictor sets, but do not establish equivalence, clinical utility, or granular-ball superiority. The contribution is a controlled, reproducible empirical comparison with explicit implementation qualifications, rather than a new selection algorithm.
+\end{abstract}
+\textbf{Keywords:} feature selection; fuzzy-rough sets; granular-ball computing; radiomics; breast ultrasound; nested cross-validation.
+
+\section{Introduction}
+A useful feature-selection study must answer more than whether one model attains the largest observed score. It should also establish that model selection was separated from performance evaluation, that correlated observations were kept together, and that a reduction in predictor count was not achieved by introducing information from held-out data. These issues are especially relevant when a patient can contribute multiple images and the candidate measurements contain substantial redundancy.
+
+This study examines those questions in a fixed breast-ultrasound radiomics setting. The data are derived from BUS-BRA \cite{busbra}, while the classifiers operate on an already prepared numeric table. We compare three pipelines under a common evaluation contract: an SVM with every available predictor, an SVM preceded by conventional fuzzy-rough selection, and an SVM preceded by a paper-based granular-ball fuzzy-rough reconstruction. Each pipeline starts with the same observations, labels and 288 named measurements. No new image features, clinical variables, synthetic samples or external training data are introduced.
+
+The research question is whether a much smaller set of classifier inputs can yield similar observed classification performance under patient-grouped nested evaluation. This question is deliberately narrower than proposing a new feature-selection theory or demonstrating a deployable diagnostic system. We also examine how consistently each selector chooses named features across the five outer training partitions. A compact subset that changes with the training partition has a different interpretation from a stable set of reproducible biomarkers.
+
+The contributions are a controlled comparison under an immutable input and split contract; independent, documented implementations with audited training boundaries; and a reporting package that separates private patient-level artifacts from public aggregate results. The granular-ball implementation is qualified throughout as a reconstruction with declared adaptations. None of the resulting scores is presented as an unmodified reproduction of the original authors' software or as evidence that a newly invented method outperforms existing research.
+
+\section{Related work}
+PyRadiomics provides a common software framework for quantitative image measurements \cite{pyradiomics}. Reproducible downstream analysis still depends on recording the extraction assumptions and evaluation design. Our work begins from a prepared feature table rather than a new image-extraction experiment.
+
+Jensen and Shen \cite{jensen} describe fuzzy-rough feature-selection approaches that evaluate information retained by a candidate subset through fuzzy similarity and dependency. We implement their similarity-based forward QuickReduct with explicitly specified operators. Xia and colleagues \cite{xia} replace individual samples with granular balls and define a size-weighted dependency for feature evaluation. We study a reconstruction of the accessible preprint, resolving implementation choices as described below; this study does not repeat the source paper's noise experiments.
+
+Nested evaluation addresses the optimistic bias that can occur when hyperparameter selection and error estimation reuse the same validation outcomes \cite{varma}. Our design nests both supervised feature selection and SVM tuning, and additionally groups images by patient. We use scikit-learn's SVM and grouped splitting implementations \cite{sklearn}, following the support-vector framework of Cortes and Vapnik \cite{svm}.
+
+Stability concerns the sensitivity of selected subsets to changes in the training sample. Nogueira and colleagues \cite{nogueira} develop a variance-based measure with chance correction. We report that measure alongside Jaccard overlap, descriptively, because the five training sets overlap. Transparent reporting is also relevant to medical prediction research \cite{tripod}; this manuscript does not claim that a checklist alone establishes low risk of bias or clinical readiness.
+
+\section{Data and evaluation protocol}
+\subsection{Frozen input and target}
+The analysis contains 1,875 image-level observations from 1,064 patient groups. The prepared target codes benign as 0 and malignant as 1, with 1,268 benign and 607 malignant images. Of the patient groups, 722 are benign and 342 malignant. The table has 288 named numeric predictors: 102 original-image and 186 first-level wavelet-derived measurements. Its 42 exact-value redundant columns remain available, giving 246 distinct column-value vectors. No column is removed globally before evaluation.
+
+The handoff records PyRadiomics extraction from lesion masks, using original images and first-level \texttt{sym2} wavelets with fixed gray-level bin width 16. It reports no image resizing or spatial resampling, and no physical pixel-spacing metadata. Geometric measurements therefore retain pixel-based interpretations. We analyze the supplied measurements unchanged and do not independently reproduce the upstream extraction in this study. The mask-defined lesion region is an assumed input, not a segmentation output evaluated here.
+
+The input CSV is verified against SHA-256
+\begin{center}\small\texttt{7f22dccf4be1f8920a0e9fbd46ae31ed814f1be138e55dc936b00b76d67324ef}.\end{center}
+Validation checks the schema, numeric finiteness, image-identifier uniqueness, consistent labels within a patient group and the supplied patient-disjoint outer fold assignments. Only the original and wavelet predictor columns enter the models. Identifiers, patient grouping fields, fold labels and other metadata are excluded from predictors. The frozen table contains no missing predictor values, so no imputation is used.
+
+\subsection{Nested patient-grouped design}
+For each supplied outer fold $f\in\{1,\ldots,5\}$, its images form the held-out test set and the remaining folds form the training set. A patient never occurs in both portions. Within each outer training set we construct three splits with \texttt{StratifiedGroupKFold}, shuffling groups with seed $42+f$. Scaling and any selector are fitted anew on each inner training partition, followed by the candidate SVM; validation partitions are transformed using those fitted objects. All methods share the same inner partitions for a given outer fold.
+
+The scaler and selector are independent of SVM candidate parameters in this experiment. We therefore fit them once for each inner training partition and reuse their transformed matrices across SVM candidates from that partition. They are not cached across training partitions. Once the best SVM settings are selected, a fresh scaler and selector are fitted to the entire outer training set, the SVM is refitted, and the outer test images are predicted exactly once. There are 15 inner selector fits and five outer selector fits per selection method.
+
+Every pipeline uses the same 32-candidate SVM grid. The penalty is $C\in\{0.1,1,10,100\}$ and class weight is either absent or inverse-frequency balanced. Linear kernels give eight combinations; radial basis function kernels use $\gamma\in\{\texttt{scale},0.01,0.1\}$ and give 24 combinations. The objective is mean inner macro-F1. Exact ties prefer higher mean inner accuracy, then fewer selected features and finally the fixed grid order. No prediction threshold is tuned and no outer-fold outcome selects hyperparameters or selector settings.
+
+\section{Methods}
+\subsection{All-feature SVM}
+The baseline standardizes all 288 predictors with training means and standard deviations, then fits the tuned SVM. It contains no filtering, projection, resampling or selector. The default SVM decision rule is retained. Using the full feature set provides a reference for both observed discrimination and the number of classifier inputs.
+
+\subsection{Conventional fuzzy-rough QuickReduct}
+For training feature $a$, we use the triangular similarity from Jensen and Shen \cite{jensen},
+\begin{equation}
+ R_a(i,j)=\max\left(1-\frac{|x_{ia}-x_{ja}|}{s_a},0\right),
+\end{equation}
+where $s_a$ is its training sample standard deviation. A constant training feature has similarity one. Relations combine using the \L{}ukasiewicz t-norm $T(u,v)=\max(u+v-1,0)$, with implicator $I(u,v)=\min(1-u+v,1)$. The dependency is
+\begin{equation}
+ \Gamma(B)=\frac{1}{n}\sum_i\max_c\inf_j I\bigl(R_B(i,j),\mathbb{1}[y_j=c]\bigr).
+\end{equation}
+For crisp binary classes, reflexivity reduces each object's positive membership to its minimum dissimilarity to an opposite-class object. The implementation uses this cross-class matrix exactly, without subsampling. Greedy search starts empty and adds the feature yielding the largest dependency increase. It stops at dependency one, exhausted candidates, or no increase above $10^{-12}$. Candidate ties retain original column order. The heuristic need not produce a minimum-cardinality reduct. A six-object example from the source manuscript is reproduced in the software tests.
+
+\subsection{Granular-ball fuzzy-rough reconstruction}
+For a fixed training partition, let $G_i$ be a granular ball with center $c_i$, majority label $z_i$ and weight $w_i=|G_i|/n$. Following the accessible Xia et al. preprint \cite{xia}, the subset dependency is implemented as
+\begin{equation}\label{eq:gb}
+ D(B)=\sum_i w_i\min_{j:z_j\ne z_i}\frac{\|c_i[B]-c_j[B]\|_2}{\sqrt{|B|}}.
+\end{equation}
+Weights belong to the ball being evaluated. Memberships are fixed during forward search. Each candidate adds one feature, maximizing $D(B)$; the search stops when normalized dependency does not increase above $10^{-12}$. The changing $\sqrt{|B|}$ normalizer is part of this reconstruction's stopping convention, not a fixed-distance-parameter minimum-reduct procedure.
+
+Our implementation maps training-standardized features to $[0,1]$ for internal ball geometry only. This keeps normalized center distances in the intended range. The SVM receives the selected standardized columns. Purity is fixed at 0.90 before the original evaluation. Initial clustering uses $\lfloor\sqrt{n_c}\rfloor$ training examples from each class as seeds with random state 42. An impure ball is split by two-means initialized from the minimum feature-sum example of each class. A ball's radius is its mean distance to its center. Majority ties use the first observed label. Heterogeneous overlapping balls are split with two-means, seed 5 and one initialization, with global overlap rechecks. Unsplittable geometry raises an error; no observations are silently removed. Training-row coverage is recorded for every fitted selector.
+
+The author-linked archive inspected at commit \texttt{0382e0899b0dc5529c89d1b9a11da198464d49ad} contains a dependency expression that differs from the preprint's own-ball-weighted Equation 13. No code license was found in that inspected archive. We therefore neither redistribute nor import its code. The independent reconstruction uses Equation~\ref{eq:gb}, with the normalization, deterministic initialization, global overlap checks and fixed purity explicitly declared here. Consequently, its results must not be described as numerical equivalence to the authors' released program or journal experiments.
+
+\subsection{Performance, uncertainty and stability}
+The primary endpoint is the mean of image-level macro-F1 over the five outer test folds. With benign and malignant class F1 values $F_{1,0}$ and $F_{1,1}$, macro-F1 is $(F_{1,0}+F_{1,1})/2$. Accuracy, balanced accuracy, malignant recall and benign specificity are also reported, with malignant designated positive. We present fold means and sample SDs. The SD measures variability across these folds, not the standard error of an independent-sample estimator.
+
+A supplementary analysis pools the fixed out-of-fold predictions. We draw 5,000 bootstrap samples of patients within diagnosis strata, seed 42, retaining all images of a sampled patient and using the identical resample for all methods. Percentile limits give 95\% intervals for pooled macro-F1 and paired pooled-metric differences. No pipeline is refitted during resampling. These intervals condition on the fitted OOF predictions; they do not account for all retraining uncertainty or dependence created by overlapping CV training sets. They are not full nested-bootstrap intervals and are not used to declare equivalence or non-inferiority.
+
+For selected sets $S_1,\ldots,S_5$, we report all ten pairwise Jaccard overlaps $|S_i\cap S_j|/|S_i\cup S_j|$ and their mean. We also compute Nogueira et al.'s variance-based stability \cite{nogueira}. If $Z_{fa}$ indicates selection of feature $a$ in fold $f$, $s_a^2$ is its sample variance across folds and $q$ is the mean selection fraction, the reported quantity is
+\begin{equation}
+ \widehat{\Phi}=1-\frac{p^{-1}\sum_{a=1}^{p}s_a^2}{q(1-q)},\qquad p=288.
+\end{equation}
+The all-selected boundary is assigned one. These statistics describe overlapping training sets and named columns, not independent feature-discovery experiments. Equivalent redundant measurements can lower overlap without implying different underlying image information.
+
+\section{Results}
+\subsection{Observed performance and input reduction}
+Table~\ref{tab:primary} reports the primary endpoint, accuracy and selected count. Figure~\ref{fig:performance} displays the same comparison. The selectors substantially reduce the number of columns used by the SVM. Their mean macro-F1 values remain close to the all-feature reference, but a small observed difference alone cannot establish improvement or preservation within a prespecified equivalence margin.
+\begin{table}[htbp]\centering\small
+\setlength{\tabcolsep}{4pt}
+\PrimaryTable
+\caption{Five outer-fold means and sample SDs. Feature counts are fold means; reduction is relative to all 288 candidate predictors. ``GBFRS reconstruction'' refers to the qualified implementation in Section 4.3.}\label{tab:primary}
+\end{table}
+\begin{figure}[htbp]\centering
+\includegraphics[width=\linewidth]{figures/performance-reduction.png}
+\caption{Macro-F1 and number of classifier inputs on the fixed five-fold protocol. Error bars are sample SD across outer folds, not confidence intervals. Source: the complete 28 October 2026 rerun.}\label{fig:performance}
+\end{figure}
+
+Table~\ref{tab:clinical} reports the secondary class-specific summaries. Conventional fuzzy-rough selection has the highest observed mean malignant recall, whereas the granular-ball reconstruction has the highest observed mean benign specificity. These are descriptive differences under the shared default decision rule. They do not define clinically acceptable operating points, and no model has been selected using those outer-test trade-offs.
+\begin{table}[htbp]\centering\small
+\setlength{\tabcolsep}{4pt}\ClinicalTable
+\caption{Secondary metrics, as outer-fold means and sample SDs. Malignant recall is sensitivity for class 1, and benign specificity is the true-negative rate for class 0.}\label{tab:clinical}
+\end{table}
+
+\subsection{Paired conditional uncertainty}
+Table~\ref{tab:effects} and Figure~\ref{fig:effects} describe paired changes in \emph{pooled} OOF macro-F1. They intentionally use a different estimand from the mean-fold primary endpoint. The patient-level resampling unit reflects the one- or two-image grouping structure; treating images as independent bootstrap units would ignore that structure. The inferential scope remains conditional on the predictions produced by this particular nested evaluation.
+\begin{table}[htbp]\centering\small
+\setlength{\tabcolsep}{4pt}\resizebox{\linewidth}{!}{\EffectTable}
+\caption{Differences in pooled OOF macro-F1 with conditional patient-stratified bootstrap intervals. These limits are descriptive and do not quantify uncertainty from repeating the full learning procedure.}\label{tab:effects}
+\end{table}
+\begin{figure}[htbp]\centering
+\includegraphics[width=\linewidth]{figures/paired-effects.png}
+\caption{Paired differences in pooled macro-F1; the dashed line denotes zero. Intervals use the same 5,000 patient-cluster resamples for all methods. They must not be interpreted as an equivalence test.}\label{fig:effects}
+\end{figure}
+
+\subsection{Selection stability and measured computation}
+Table~\ref{tab:stability} summarizes selection overlap, chance-adjusted stability and measured total wall time across five folds. The granular-ball reconstruction has higher observed named-set overlap than conventional fuzzy-rough selection in this experiment; this is a descriptive comparison of these five overlapping training sets, not evidence of general biological stability. Baseline overlap is one by construction, because it always includes every feature; this is not evidence that it discovers a better subset. The two selectors are evaluated on their own fold-specific sets, with no retrospective consensus subset substituted into the performance evaluation.
+\begin{table}[htbp]\centering\small
+\setlength{\tabcolsep}{5pt}\StabilityTable
+\caption{Descriptive stability across five overlapping outer training sets and observed wall time. Methods ran sequentially with two SVM candidate workers and native threads limited to one. Desktop background activity was not controlled; times are machine dependent.}\label{tab:stability}
+\end{table}
+The selector timing field includes inner and outer selection, while the refit timing includes outer selection again. These overlapping fields are not added. The reported total uses the separately measured fold wall time, summed across folds. Feature selection itself can be costly even when the selected SVM input is small; a lower predictor count is not automatically a reduction in total training time or image-extraction cost.
+
+\section{Discussion and limitations}
+The principal observation is a trade-off between a large reduction in classifier inputs and close observed performance under one fixed evaluation. This is useful as an empirical result even without a consistent accuracy improvement. It encourages examination of compact subsets, while preserving the distinction between an observed similarity and a statistically supported equivalence claim.
+
+Several limitations restrict the scope. First, this is one prepared dataset and one fixed five-fold design. The study has no independent external cohort, prospective evaluation or second radiomics extraction. The outer folds have overlapping training sets, and the supplementary conditional bootstrap does not remove the uncertainty associated with that overlap. Re-executing the same protocol is a software reproducibility check, not an additional independent scientific replication.
+
+Second, the comparison contains only three planned pipelines. It does not establish superiority over modern embedded selectors, other radiomics workflows or deep-learning systems. No noise perturbation experiment is performed, so the source GBFRS paper's robustness motivation is not experimentally validated here. The purity threshold is fixed rather than inner-tuned; this limits claims about the best performance achievable by that method, while avoiding an undeclared extension of the shared search protocol.
+
+Third, the granular-ball implementation is a qualified reconstruction. Differences between the accessible equations and inspected code required explicit choices. Reporting those choices makes this particular experiment inspectable; it does not settle which implementation should be regarded as the definitive journal algorithm. Further work should compare a licensed author reference and harmonized reconstructions on common small benchmarks before making exact-replication claims.
+
+Fourth, this is an image-level classification task with patient-grouped splitting, not a patient-level diagnostic endpoint. Lesion masks are assumed available. Calibration, reader comparison, downstream decisions and clinical net benefit are not evaluated. Device and demographic subgroup analyses are not available from the permitted predictor table, so transportability and subgroup fairness remain unassessed. The absence of physical pixel spacing also limits interpretation of geometric radiomic quantities.
+
+Fifth, feature stability is measured on named columns with known redundancies. Selecting alternative correlated or numerically equivalent columns can produce low named-set overlap. Stability should therefore not be treated as direct evidence for or against a reproducible biological mechanism. The study does not replace unstable names with new engineered features, since that would change the frozen candidate matrix.
+
+Finally, the original protocol was established in the team handoff, not prospectively registered in a public registry. The uncertainty and stability reporting were added during manuscript preparation after the initial results had been seen. They are explicitly secondary descriptive analyses. The current rerun keeps the model definitions, source folds, SVM grid and selector settings unchanged rather than choosing new settings in response to the earlier outer scores.
+
+\section{Reproducibility and research statements}
+\subsection{Code and execution}
+The public repository is \href{https://github.com/naazzarov/busbra-ultrasound-classification}{\texttt{naazzarov/busbra-ultrasound-classification}}. It includes method definitions, the frozen evaluation contract, dependency lockfile, test suite, aggregate results, manuscript source and figure-generation code. The primary rerun uses Python 3.12, NumPy 2.2.6, pandas 2.3.3, SciPy 1.15.3, scikit-learn 1.6.1, joblib 1.5.3 and threadpoolctl 3.6.0. Exact platform information is recorded in the aggregate artifact. Matplotlib 3.10.8 generates figures in a separate environment and is not part of model training.
+
+The \texttt{run-all} command executes the complete frozen evaluation sequentially for all methods. A run manifest records completion or failure without overwriting previous runs. Each private submission contains the original five CSV/JSON outputs, full inner-search records, selected names, dependency histories, source checksums and runnable source. The comparison checker verifies paired observation/group/fold/label alignment. Software tests separately audit training-only fitting boundaries; output validation alone cannot prove absence of methodological leakage.
+
+\subsection{Data availability and ethics scope}
+The original anonymized BUS-BRA images are distributed by their creators through Zenodo \cite{zenodo}. We do not redistribute images, the private prepared table, group identifiers, individual predictions or fitted model artifacts. The public release contains aggregate measurements and derived figures. Reproduction of the exact downstream experiment requires authorized access to the unchanged prepared table; access to the original images alone does not fully specify that table without the upstream extraction environment.
+
+This work is a secondary computational analysis. No new patient recruitment or data collection is reported. The source dataset's ethical and collection context should be read in its original publication. This manuscript does not assert an independent ethics exemption, institutional approval or clinical validation that has not been documented.
+
+\subsection{Authorship, assistance and acknowledgments}
+Git history and source citations preserve attribution to the original team scaffold and the methods on which this work builds. The present manuscript reports the computational experiment and does not assert undocumented institutional approval, funding or clinical evaluation.
+
+OpenAI Codex was used substantially for implementation assistance, software checks, analysis tooling and manuscript drafting. Responsibility for the submitted code, results, citations and text rests with the named human authors, irrespective of assistance used during preparation. The tool is not listed as an author. The authors acknowledge Luo Chuan.
+
+\section{Conclusion}
+Under a frozen patient-grouped nested protocol, conventional fuzzy-rough selection and a qualified granular-ball reconstruction reduce the SVM predictor count substantially while yielding macro-F1 point estimates close to the all-feature baseline. The result supports further study of compact radiomic classifier inputs on BUS-BRA. It does not establish clinical performance, statistical equivalence or a general advantage of granular-ball selection. External evaluation, broader comparators and clearer reference-implementation agreement are needed to extend the conclusions.
+
+\begin{thebibliography}{99}
+\bibitem{busbra} W. G\'omez-Flores, M. J. Gregorio-Calas, and W. Coelho de Albuquerque Pereira. BUS-BRA: A breast ultrasound dataset for assessing computer-aided diagnosis systems. \emph{Medical Physics}, 51:3110--3123, 2024. \url{https://doi.org/10.1002/mp.16812}.
+\bibitem{zenodo} W. G\'omez-Flores, M. J. Gregorio-Calas, and W. Coelho de Albuquerque Pereira. BUS-BRA dataset, version 1.0. Zenodo. \url{https://doi.org/10.5281/zenodo.8231412}.
+\bibitem{pyradiomics} J. J. M. van Griethuysen et al. Computational radiomics system to decode the radiographic phenotype. \emph{Cancer Research}, 77(21):e104--e107, 2017. \url{https://doi.org/10.1158/0008-5472.CAN-17-0339}.
+\bibitem{jensen} R. Jensen and Q. Shen. New approaches to fuzzy-rough feature selection. \emph{IEEE Transactions on Fuzzy Systems}, 17(4):824--838, 2009. \url{https://doi.org/10.1109/TFUZZ.2008.924209}.
+\bibitem{xia} S. Xia, X. Lian, B. Sang, G. Wang, and X. Gao. GBFRS: Robust fuzzy rough sets via granular-ball computing. arXiv:2501.18413v1, 2025. \url{https://arxiv.org/abs/2501.18413}. Our implemented target is this accessible preprint; the later journal record is \url{https://doi.org/10.1109/TNNLS.2026.3681370}.
+\bibitem{varma} S. Varma and R. Simon. Bias in error estimation when using cross-validation for model selection. \emph{BMC Bioinformatics}, 7:91, 2006. \url{https://doi.org/10.1186/1471-2105-7-91}.
+\bibitem{svm} C. Cortes and V. Vapnik. Support-vector networks. \emph{Machine Learning}, 20:273--297, 1995. \url{https://doi.org/10.1007/BF00994018}.
+\bibitem{sklearn} F. Pedregosa et al. Scikit-learn: Machine learning in Python. \emph{Journal of Machine Learning Research}, 12:2825--2830, 2011. \url{https://jmlr.org/papers/v12/pedregosa11a.html}.
+\bibitem{nogueira} S. Nogueira, K. Sechidis, and G. Brown. On the stability of feature selection algorithms. \emph{Journal of Machine Learning Research}, 18(174):1--54, 2018. \url{https://jmlr.org/papers/v18/17-514.html}.
+\bibitem{tripod} G. S. Collins et al. TRIPOD+AI statement: Updated guidance for reporting clinical prediction models that use regression or machine learning methods. \emph{BMJ}, 385:e078378, 2024. \url{https://doi.org/10.1136/bmj-2023-078378}.
+\end{thebibliography}
+\end{document}

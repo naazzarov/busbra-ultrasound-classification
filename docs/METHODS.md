@@ -97,5 +97,7 @@ not be added. total_seconds is the non-overlapping fold wall time. Runtime
 comparison uses total_seconds; candidate workers share memory with native
 BLAS/OpenMP limited to one thread. Package versions and hardware are recorded.
 
-All real-data artifacts, including aggregate scores, stay local. Publication
-contains source, synthetic software checks, citations and protocol only.
+The frozen table, identifiers, row-level predictions, model files and per-fold
+selected-feature exports stay local. The paper release intentionally publishes
+only aggregate scores, descriptive stability, conditional bootstrap intervals
+and derived figures. See STATISTICAL_ANALYSIS.md for their interpretation.

@@ -39,6 +39,8 @@ def validate_table(table: pd.DataFrame, *, n_rows: int, n_patients: int, n_predi
         raise ValueError("Missing or nonfinite radiomic predictors are forbidden")
     if set(table.diagnosis) != {0, 1}:
         raise ValueError("Diagnosis must contain both labels 0 and 1")
+    if table.groupby("patient_id").diagnosis.nunique().max() != 1:
+        raise ValueError("Patient groups must have a consistent diagnosis")
     contract = read_contract()
     if set(table.fold5_kfold) != set(contract["outer_folds"]):
         raise ValueError("Outer folds must be exactly 1 through 5")

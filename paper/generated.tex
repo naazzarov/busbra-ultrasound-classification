@@ -1,0 +1,47 @@
+% Generated from results/aggregate_results.json. Do not hand-edit.
+\newcommand{\BaselineFone}{0.8534}
+\newcommand{\BaselineAccuracy}{0.8714}
+\newcommand{\BaselineRecall}{0.8063}
+\newcommand{\BaselineSpecificity}{0.9023}
+\newcommand{\BaselineFeatures}{288}
+\newcommand{\BaselineReduction}{0.00}
+\newcommand{\FuzzyFone}{0.8501}
+\newcommand{\FuzzyAccuracy}{0.8673}
+\newcommand{\FuzzyRecall}{0.8196}
+\newcommand{\FuzzySpecificity}{0.8901}
+\newcommand{\FuzzyFeatures}{7.6}
+\newcommand{\FuzzyReduction}{97.36}
+\newcommand{\GBFone}{0.8540}
+\newcommand{\GBAccuracy}{0.8726}
+\newcommand{\GBRecall}{0.8030}
+\newcommand{\GBSpecificity}{0.9060}
+\newcommand{\GBFeatures}{13}
+\newcommand{\GBReduction}{95.49}
+\newcommand{\PrimaryTable}{%
+\begin{tabular}{lrrrr}\toprule
+Method & Macro-F1 & Accuracy & Features & Reduction (\%)\\\midrule
+All features & 0.8534 $\pm$ 0.0436 & 0.8714 $\pm$ 0.0389 & 288 & 0.00 \\
+Fuzzy-rough & 0.8501 $\pm$ 0.0362 & 0.8673 $\pm$ 0.0312 & 7.6 & 97.36 \\
+GBFRS reconstruction & 0.8540 $\pm$ 0.0417 & 0.8726 $\pm$ 0.0346 & 13 & 95.49 \\
+\bottomrule\end{tabular}}
+\newcommand{\ClinicalTable}{%
+\begin{tabular}{lrrr}\toprule
+Method & Balanced accuracy & Malignant recall & Benign specificity\\\midrule
+All features & 0.8543 $\pm$ 0.0454 & 0.8063 $\pm$ 0.0748 & 0.9023 $\pm$ 0.0377 \\
+Fuzzy-rough & 0.8548 $\pm$ 0.0395 & 0.8196 $\pm$ 0.0643 & 0.8901 $\pm$ 0.0178 \\
+GBFRS reconstruction & 0.8545 $\pm$ 0.0465 & 0.8030 $\pm$ 0.0841 & 0.9060 $\pm$ 0.0200 \\
+\bottomrule\end{tabular}}
+\newcommand{\StabilityTable}{%
+\begin{tabular}{lrrr}\toprule
+Method & Mean Jaccard & Nogueira stability & Total time (s)\\\midrule
+All features & 1.000 & 1.000 & 177.0 \\
+Fuzzy-rough & 0.249 & 0.378 & 33.0 \\
+GBFRS reconstruction & 0.531 & 0.678 & 211.2 \\
+\bottomrule\end{tabular}}
+\newcommand{\EffectTable}{%
+\begin{tabular}{lrr}\toprule
+Comparison & Pooled macro-F1 difference & 95\% interval\\\midrule
+Fuzzy-rough minus All features & -0.0034 & [-0.0188, +0.0118] \\
+GBFRS reconstruction minus All features & +0.0008 & [-0.0122, +0.0139] \\
+GBFRS reconstruction minus Fuzzy-rough & +0.0042 & [-0.0069, +0.0158] \\
+\bottomrule\end{tabular}}
