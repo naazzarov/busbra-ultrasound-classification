@@ -1,0 +1,49 @@
+name: Independent public ultrasound benchmark
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/external-ultrasound.yml'
+      - 'evaluation/external_ultrasound_protocol.json'
+      - 'evaluation/extraction-requirements.txt'
+      - 'tools/extract_breast.py'
+      - 'tools/run_external.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  breast:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    env:
+      OMP_NUM_THREADS: '1'
+      OPENBLAS_NUM_THREADS: '1'
+      MKL_NUM_THREADS: '1'
+      ITK_GLOBAL_DEFAULT_NUMBER_OF_THREADS: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - uses: astral-sh/setup-uv@v6
+      - name: Install isolated radiomics extractor
+        run: |
+          python -m venv /tmp/breast-extractor
+          /tmp/breast-extractor/bin/pip install setuptools==79.0.1 wheel==0.45.1 numpy==1.26.4
+          /tmp/breast-extractor/bin/pip install --no-build-isolation -r evaluation/extraction-requirements.txt
+      - name: Download official public data and extract features privately
+        run: /tmp/breast-extractor/bin/python tools/extract_breast.py --output private_outputs/external-breast
+      - name: Train and validate independent pipelines
+        run: |
+          uv sync --locked --python 3.12
+          uv run --locked python tools/run_external.py --root private_outputs/external-breast --output private_outputs/breast-aggregate.json --jobs 2
+      - name: Publish aggregate measurements only
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: breast-aggregate-only
+          path: private_outputs/breast-aggregate.json
+          if-no-files-found: ignore
+          retention-days: 30

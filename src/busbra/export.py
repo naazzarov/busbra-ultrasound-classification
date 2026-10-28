@@ -31,6 +31,15 @@ def export_submission(result, output):
             shutil.copyfile(root / "docs" / name, output / name)
     (output / "requirements.txt").write_text("\n".join(f"{k}=={v}" for k, v in result.metadata["versions"].items()) + "\n")
     method = result.metadata["method"]
+    if result.metadata.get("protocol_id") == "BUSBRA-ROBUSTNESS-20261028-V1":
+        shutil.copyfile(root / "tools" / "run_robustness.py", output / "code" / "run_robustness.py")
+        command = f"--data PATH/TO/UNCHANGED.csv --experiments {method} --output NEW_PRIVATE_DIR --jobs 2"
+        (output / "README.md").write_text(
+            f"# Private robustness experiment: {method}\n\nKeep all contents private.\n"
+            f"Repository: PYTHONPATH=src python tools/run_robustness.py {command}\n"
+            f"Standalone: PYTHONPATH=code python code/run_robustness.py {command}\n"
+            "Install requirements.txt using the recorded Python version. See internal_run.json.\n")
+        return
     if result.metadata.get("protocol_id") == "BUSBRA-SECONDARY-20261028-V1":
         shutil.copyfile(root / "tools" / "run_secondary.py", output / "code" / "run_secondary.py")
         data_arg = " --data PATH/TO/UNCHANGED.csv" if result.metadata["dataset"] == "busbra" else ""

@@ -184,10 +184,11 @@ def make_secondary_selector(method, config, author_path=None):
     return make_selector(method)
 
 
-def _prepare_secondary(X, y, method, config, author_path):
+def _prepare_secondary(X, y, method, config, author_path, selector_factory=None):
     scaler = StandardScaler().fit(X)
     transformed = scaler.transform(X)
-    selector = make_secondary_selector(method, config, author_path)
+    factory = selector_factory or make_secondary_selector
+    selector = factory(method, config, author_path)
     start = perf_counter()
     if selector is not None:
         transformed = selector.fit_transform(transformed, y)
@@ -202,7 +203,9 @@ def _transform(scaler, selector, X):
     return selector.transform(value) if selector is not None else value
 
 
-def evaluate_secondary(data, method, *, n_jobs=2, author_path=None, progress=None):
+def evaluate_secondary(data, method, *, n_jobs=2, author_path=None, progress=None,
+                       selector_factory=None, training_label_transform=None,
+                       protocol_id=PROTOCOL):
     if n_jobs < 1:
         raise ValueError('n_jobs must be positive')
     table = data.table
@@ -223,6 +226,9 @@ def evaluate_secondary(data, method, *, n_jobs=2, author_path=None, progress=Non
             if set(groups[outer_fit]) & set(groups[outer_test]):
                 raise ValueError('Group leakage in secondary outer folds')
             train_X, train_y, train_g = X[outer_fit], y[outer_fit], groups[outer_fit]
+            perturbation = None
+            if training_label_transform is not None:
+                train_y, perturbation = training_label_transform(train_y.copy(), train_g.copy(), fold)
             inner = list(StratifiedGroupKFold(3,shuffle=True,random_state=42+fold).split(train_X,train_y,train_g))
             for fit, valid in inner:
                 if set(train_g[fit]) & set(train_g[valid]):
@@ -236,7 +242,7 @@ def evaluate_secondary(data, method, *, n_jobs=2, author_path=None, progress=Non
                 prepared, audit = [], []
                 try:
                     for fit, valid in inner:
-                        scaler, selector, transformed, indices, elapsed = _prepare_secondary(train_X[fit], train_y[fit], method, config, author_path)
+                        scaler, selector, transformed, indices, elapsed = _prepare_secondary(train_X[fit], train_y[fit], method, config, author_path, selector_factory)
                         selection_seconds += elapsed
                         prepared.append((transformed, train_y[fit], _transform(scaler,selector,train_X[valid]), train_y[valid]))
                         audit.append({'training_rows':len(fit),'validation_rows':len(valid),'selected_indices':indices.tolist()})
@@ -254,7 +260,7 @@ def evaluate_secondary(data, method, *, n_jobs=2, author_path=None, progress=Non
             best = choose_candidate(all_scores)
             chosen = candidates[best]
             tick = perf_counter()
-            scaler, selector, transformed, indices, elapsed = _prepare_secondary(train_X,train_y,method,chosen['selector'],author_path)
+            scaler, selector, transformed, indices, elapsed = _prepare_secondary(train_X,train_y,method,chosen['selector'],author_path,selector_factory)
             selection_seconds += elapsed
             params = {k.removeprefix('svm__'):v for k,v in chosen['svm'].items()}
             model = SVC(**params).fit(transformed,train_y)
@@ -274,13 +280,15 @@ def evaluate_secondary(data, method, *, n_jobs=2, author_path=None, progress=Non
                           'selected_feature_count':len(indices),'selector_partitions':partition_audit,
                           'search_results':[dict(p,**s) for p,s in zip(candidates,all_scores)],
                           'metrics':classification_metrics(y[outer_test],predictions[outer_test])})
+            if perturbation is not None:
+                folds[-1]['training_label_perturbation'] = perturbation
             if progress:
                 progress(data.name,method,fold,len(indices),folds[-1]['total_seconds'])
     if not np.all(held_out_count==1) or not np.isin(predictions,[0,1]).all():
         raise ValueError('Every secondary case must have exactly one held-out prediction')
     prediction_table = pd.DataFrame({'image_id':table.image_id.to_numpy(),'patient_id':groups,
         'outer_fold':table.fold5_kfold.to_numpy(),'y_true':y,'y_pred':predictions})
-    meta = {'method':method,'protocol_id':PROTOCOL,'dataset_sha256':data.sha256,'status':'COMPLETED',
+    meta = {'method':method,'protocol_id':protocol_id,'dataset_sha256':data.sha256,'status':'COMPLETED',
             'dataset':data.name,'unit':data.unit,'seed':42,'n_jobs':n_jobs,'platform':platform.platform(),
             'python':platform.python_version(),
             'source_sha256':{p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in Path(__file__).parent.glob('*.py')},
